@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สสว. SME Marketplace — Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --primary-blue: #2563EB;
+  --brand-blue: #1D4ED8;
+  --brand-blue-dark: #1E40AF;
+  --gov-navy: #1E3A8A;
+  --slate-dark: #1E293B;
+  --slate-body: #475569;
+  --neutral-bg: #F8FAFC;
+  --surface-white: #FFFFFF;
+  --emerald-verified: #059669;
+  --emerald-bg: #ECFDF5;
+  --emerald-border: #A7F3D0;
+  --amber-promo: #F97316;
+  --amber-solid: #FBBF24;
+  --amber-text: #F59E0B;
+  --border-subtle: #E2E8F0;
+  --danger: #EF4444;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--neutral-bg);
+  font-family: 'Kanit', system-ui, sans-serif;
+  color: var(--slate-dark);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand-blue); text-decoration: none; }
+input, select, button, textarea { font-family: inherit; }
+button { border: none; background: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+::-webkit-scrollbar { height: 8px; width: 8px; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+.num { font-family: 'Satoshi', 'Kanit', sans-serif; }
+
+@keyframes pulseDot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+
+.lucide-icon { width: 50%; height: 50%; stroke: currentColor; stroke-width: 2; fill: none; }
+
+.page { min-height: 100vh; display: flex; flex-direction: column; background: var(--neutral-bg); }
+
+/* ---------- Utility bar ---------- */
+.utility-bar { background: var(--brand-blue); color: #C7D2FE; font-size: 12.5px; }
+.utility-bar .wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px; height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.utility-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.utility-left .gov-label { display: flex; align-items: center; gap: 6px; color: #fff; font-weight: 500; }
+.utility-left a { color: #C7D2FE; }
+.utility-left a:hover { color: #fff; }
+.utility-sep { opacity: .4; }
+.utility-right { display: flex; align-items: center; gap: 10px; }
+.lang-active { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; color: #fff; background: rgba(255,255,255,.14); padding: 3px 8px; border-radius: 5px; }
+.lang-inactive { font-family: 'Satoshi', 'Kanit', sans-serif; color: #C7D2FE; }
+
+/* ---------- Header ---------- */
+.site-header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid var(--border-subtle); }
+.header-row { max-width: 1280px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-shrink: 0; }
+.brand-mark { height: 34px; width: auto; display: block; }
+.brand-text { line-height: 1.15; }
+.brand-title { font-size: 15px; font-weight: 600; color: var(--slate-dark); }
+.brand-domain { font-size: 10.5px; color: var(--slate-body); font-family: 'Satoshi', 'Kanit', sans-serif; letter-spacing: .04em; }
+
+.menu-btn { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 9px 13px; font-size: 13.5px; color: #334155; cursor: pointer; flex-shrink: 0; }
+.menu-btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+.menu-icon { display: grid; gap: 3px; }
+.menu-icon span { display: block; width: 14px; height: 2px; background: currentColor; border-radius: 2px; }
+
+.search-wrap { flex: 1; position: relative; min-width: 120px; }
+.search-input { width: 100%; height: 42px; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 0 44px 0 14px; font-size: 14px; color: var(--slate-dark); background: var(--neutral-bg); outline: none; }
+.search-input:focus { border-color: var(--brand-blue); background: #fff; }
+.search-btn { position: absolute; right: 5px; top: 5px; width: 34px; height: 32px; border-radius: 7px; background: var(--brand-blue); display: grid; place-items: center; color: #fff; font-size: 13px; }
+.suggest-panel { position: absolute; top: 48px; left: 0; right: 0; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: 0 16px 40px rgba(15,23,42,.12); padding: 8px; z-index: 60; }
+.suggest-label { font-size: 11px; color: var(--slate-body); padding: 6px 10px; }
+.suggest-item { padding: 9px 10px; border-radius: 8px; font-size: 13.5px; color: #334155; cursor: pointer; }
+.suggest-item:hover { background: #F1F5F9; }
+
+.action-hub { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.hub-icon { width: 40px; height: 40px; border-radius: 9px; display: grid; place-items: center; font-size: 12px; color: var(--slate-body); cursor: pointer; position: relative; }
+.hub-icon:hover { background: #F1F5F9; }
+.hub-badge { position: absolute; top: 2px; right: 0; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+.hub-sep { width: 1px; height: 24px; background: var(--border-subtle); margin: 0 4px; }
+.hub-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.hub-avatar { width: 32px; height: 32px; border-radius: 50%; background: #DBEAFE; color: var(--brand-blue); display: grid; place-items: center; font-size: 13px; }
+.hub-name { font-size: 13px; color: #334155; line-height: 1.2; }
+.hub-verified { font-size: 10.5px; color: var(--emerald-verified); }
+
+.menu-panel { border-top: 1px solid var(--border-subtle); background: #fff; }
+.menu-grid { max-width: 1280px; margin: 0 auto; padding: 18px 16px; display: grid; gap: 10px; }
+.menu-cell { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; }
+.menu-cell:hover { background: #F1F5F9; }
+.menu-glyph { width: 34px; height: 34px; border-radius: 9px; background: #EFF6FF; color: var(--brand-blue); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.menu-name { font-size: 13.5px; color: #334155; }
+
+/* ---------- Shared layout ---------- */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+.section { max-width: 1280px; margin: 0 auto; padding: 20px 16px 0; }
+.card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; }
+
+/* ---------- Hero ---------- */
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.hero-main { position: relative; border-radius: 16px; overflow: hidden; background: var(--border-subtle); aspect-ratio: 2.4/1; min-height: 220px; }
+.hero-track { display: flex; height: 100%; transition: transform .65s cubic-bezier(.65,0,.35,1); will-change: transform; }
+.hero-slide { position: relative; flex: 0 0 100%; height: 100%; }
+.hero-caption { position: absolute; left: 0; bottom: 0; right: 0; padding: 24px; background: linear-gradient(to top, rgba(15,23,42,.82), rgba(15,23,42,0)); pointer-events: none; }
+.hero-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--amber-promo); color: #fff; font-weight: 700; letter-spacing: .2px; font-size: 11.5px; padding: 5px 12px 5px 9px; border-radius: 999px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(154,52,18,.4), 0 0 0 1px rgba(255,255,255,.22) inset; }
+.hero-tag .pill-icon { width: 12px; height: 12px; }
+.hero-title { color: #fff; font-size: 26px; font-weight: 600; line-height: 1.25; }
+.hero-sub { color: var(--border-subtle); font-size: 14px; margin-top: 6px; }
+.hero-cta { display: inline-flex; align-items: center; gap: 7px; margin-top: 16px; background: #fff; color: var(--brand-blue); border: none; font-size: 14px; padding: 11px 22px; border-radius: 10px; cursor: pointer; pointer-events: auto; box-shadow: 0 4px 14px rgba(15,23,42,.28); transition: background .2s, color .2s, transform .2s, box-shadow .2s; }
+.hero-cta .pill-icon { width: 14px; height: 14px; transition: transform .2s; }
+.hero-cta:hover { background: var(--brand-blue-dark); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,23,42,.32); }
+.hero-cta:hover .pill-icon { transform: translateX(3px); }
+.hero-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.92); border: none; color: var(--brand-blue); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; z-index: 3; box-shadow: 0 3px 12px rgba(15,23,42,.28); transition: opacity .25s, background .2s, transform .2s; }
+.hero-arrow .pill-icon { width: 18px; height: 18px; stroke-width: 2.4; }
+.hero-arrow-left { left: 14px; }
+.hero-arrow-right { right: 14px; }
+.hero-main:hover .hero-arrow { opacity: 1; }
+.hero-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+.hero-arrow-left:hover .pill-icon { transform: translateX(-1px); }
+.hero-arrow-right:hover .pill-icon { transform: translateX(1px); }
+.hero-dots { position: absolute; bottom: 14px; right: 16px; display: flex; gap: 6px; z-index: 2; }
+.hero-dot { height: 7px; border-radius: 4px; cursor: pointer; transition: width .25s, background .25s; }
+
+/* ---------- Placeholder image slot ---------- */
+.img-slot { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; color: var(--slate-body); background: #F1F5F9; padding: 6px; line-height: 1.4; }
+.img-slot.static { position: static; width: 100%; height: 100%; }
+.img-slot-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #F1F5F9; }
+
+/* ---------- Category pills ---------- */
+.cat-grid { padding: 16px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+.cat-grid::-webkit-scrollbar { display: none; }
+.cat-cell { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 10px; border: 1px solid var(--border-subtle); border-radius: 999px; cursor: pointer; white-space: nowrap; background: #fff; }
+.cat-cell:hover { border-color: var(--brand-blue); background: #EFF6FF; }
+.cat-cell.active { border-color: var(--brand-blue); background: var(--brand-blue); }
+.cat-cell.active .cat-name { color: #fff; }
+.cat-cell.active .cat-glyph { background: rgba(255,255,255,.2); color: #fff; }
+.cat-glyph { width: 28px; height: 28px; border-radius: 999px; background: #EFF6FF; color: var(--brand-blue); display: grid; place-items: center; font-size: 15px; flex: 0 0 auto; }
+.cat-glyph svg { width: 16px; height: 16px; }
+.cat-name { font-size: 13px; color: #334155; line-height: 1.3; font-weight: 500; }
+
+/* ---------- Flash sale ---------- */
+.flash-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; background: var(--brand-blue); flex-wrap: wrap; border-radius: 16px 16px 0 0; }
+.flash-left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.flash-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--amber-promo); color: #fff; font-size: 12.5px; font-weight: 700; letter-spacing: .2px; padding: 5px 13px 5px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgba(154,52,18,.35), 0 0 0 1px rgba(255,255,255,.22) inset; }
+.flash-badge .pill-icon { width: 13px; height: 13px; }
+.flash-title { font-size: 20px; font-weight: 600; color: #fff; }
+.flash-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.flash-label { font-size: 12.5px; color: #DBEAFE; }
+.countdown { display: flex; gap: 8px; perspective: 300px; }
+.count-box { background: rgba(255,255,255,.16); border-radius: 10px; padding: 7px 11px; text-align: center; min-width: 56px; position: relative; overflow: hidden; }
+.count-num { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 18px; color: #fff; display: inline-block; transform-style: preserve-3d; }
+.count-unit { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 10px; color: #BFDBFE; letter-spacing: .08em; }
+
+@keyframes flipDigit {
+  0% { transform: rotateX(90deg); opacity: 0; }
+  60% { transform: rotateX(-10deg); opacity: 1; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+.count-num.flip { animation: flipDigit .5s cubic-bezier(.45, 0, .55, 1); transform-origin: 50% 50%; }
+.flash-link { font-size: 13.5px; color: #fff; text-decoration: underline; }
+.flash-scroll { display: flex; gap: 14px; padding: 18px 20px; overflow-x: auto; }
+
+/* ---------- Product cards ---------- */
+.product-card { cursor: pointer; border: 1px solid var(--border-subtle); border-radius: 12px; overflow: visible; background: #fff; display: flex; flex-direction: column; position: relative; transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; }
+.product-card:hover { border-color: #BFDBFE; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(191,219,254,.75), 0 1px 3px rgba(15,23,42,.06); }
+.flash-card { flex: 0 0 188px; }
+.product-media { position: relative; aspect-ratio: 1/1; background: #F1F5F9; overflow: hidden; border-radius: 12px 12px 0 0; }
+.disc-badge { position: absolute; top: -1px; left: -7px; background: #E94560; color: #fff; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 15px; font-weight: 800; padding: 6px 15px 8px 12px; border-radius: 0 18px 18px 0; box-shadow: 0 3px 8px rgba(0,0,0,.18); z-index: 2; }
+.disc-badge::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 0; border-left: 6px solid transparent; border-top: 6px solid #A81F38; }
+.product-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; }
+.flash-card .product-body { padding: 10px 12px 12px; }
+.feed-card .product-body { padding: 11px 12px 13px; flex: 1; }
+.verified-chip { display: inline-flex; align-items: center; gap: 4px; background: var(--emerald-bg); color: var(--emerald-verified); border: 1px solid var(--emerald-border); font-size: 10.5px; padding: 2px 7px; border-radius: 5px; align-self: flex-start; }
+.product-name { font-size: 13px; color: #334155; line-height: 1.35; height: 36px; overflow: hidden; }
+.feed-card .product-name { font-size: 13.5px; line-height: 1.4; height: 38px; }
+.price-row { display: flex; align-items: baseline; gap: 7px; }
+.feed-card .price-row { margin-top: auto; }
+.price-now { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 16px; color: var(--slate-dark); }
+.feed-card .price-now { font-size: 17px; }
+.price-old { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; color: #94A3B8; text-decoration: line-through; }
+.stock-track { height: 6px; border-radius: 4px; background: #FEF3C7; overflow: hidden; }
+.stock-fill { height: 100%; background: var(--amber-text); }
+.stock-text { font-size: 11.5px; color: var(--slate-body); }
+.meta-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--slate-body); font-family: 'Satoshi', 'Kanit', sans-serif; }
+.meta-sep { color: #CBD5E1; }
+.province-text { font-size: 11.5px; color: var(--slate-body); }
+
+/* ---------- Champions ---------- */
+.champ-card { border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.champ-head { display: flex; align-items: center; gap: 11px; }
+.champ-logo { width: 44px; height: 44px; border-radius: 12px; overflow: hidden; background: #F1F5F9; flex-shrink: 0; position: relative; }
+.champ-name { font-size: 14px; font-weight: 500; color: var(--slate-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.champ-province { font-size: 11.5px; color: var(--slate-body); }
+.champ-blurb { font-size: 12.5px; color: var(--slate-body); line-height: 1.5; }
+.champ-stats { display: flex; gap: 14px; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; color: #334155; border-top: 1px solid var(--border-subtle); padding-top: 10px; }
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { padding: 7px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--border-subtle); background: #fff; color: var(--slate-body); }
+.chip.active { border-color: var(--brand-blue); background: #EFF6FF; color: var(--brand-blue); }
+.chip.small { padding: 6px 12px; border-radius: 18px; font-size: 12.5px; }
+
+/* ---------- Related images ---------- */
+.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+.related-thumb { position: relative; aspect-ratio: 1/1; border-radius: 12px; overflow: hidden; background: #F1F5F9; border: 1px solid var(--border-subtle); cursor: pointer; }
+.related-thumb:hover { border-color: var(--brand-blue); }
+
+/* ---------- Feed ---------- */
+.feed-grid { display: grid; gap: 14px; }
+.feed-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.feed-title { font-size: 19px; font-weight: 600; }
+.feed-count { font-size: 13px; color: var(--slate-body); font-family: 'Satoshi', 'Kanit', sans-serif; }
+.load-more-wrap { display: flex; justify-content: center; margin-top: 26px; }
+
+/* ---------- Buttons ---------- */
+.btn { font-size: 14px; padding: 11px 26px; border-radius: 10px; cursor: pointer; }
+.btn-primary { background: var(--brand-blue); border: none; color: #fff; }
+.btn-primary:hover { background: var(--brand-blue-dark); }
+.btn-outline { background: #fff; border: 1.5px solid var(--brand-blue); color: var(--brand-blue); }
+.btn-outline:hover { background: #EFF6FF; }
+.btn-outline.solid-hover:hover { background: var(--brand-blue-dark); color: #fff; }
+.btn-block { width: 100%; }
+.btn-green { background: var(--emerald-verified); border: none; color: #fff; }
+.btn-green:hover { background: #047857; }
+
+/* ---------- Breadcrumb / PDP ---------- */
+.breadcrumb { font-size: 12.5px; color: var(--slate-body); margin-bottom: 14px; }
+.breadcrumb .crumb-link { cursor: pointer; color: var(--brand-blue); }
+.crumb-current { color: #334155; }
+
+.pdp-grid { display: grid; gap: 22px; align-items: start; }
+.gallery-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; width: 100%; margin: 0 auto; }
+.gallery-main { aspect-ratio: 1/1; border-radius: 10px; overflow: hidden; background: #F1F5F9; position: relative; }
+.gallery-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+.gallery-thumb { aspect-ratio: 1/1; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border-subtle); background: #F1F5F9; position: relative; }
+.gallery-thumb.active { border-color: var(--brand-blue); }
+
+.pdp-info-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px; }
+.pdp-badges { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.badge-verified { display: inline-flex; align-items: center; gap: 5px; background: var(--emerald-bg); color: var(--emerald-verified); border: 1px solid var(--emerald-border); font-size: 12px; padding: 4px 9px; border-radius: 6px; }
+.badge-cat { background: #EFF6FF; color: var(--brand-blue); border: 1px solid #BFDBFE; font-size: 12px; padding: 4px 9px; border-radius: 6px; }
+.pdp-title { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.35; color: var(--slate-dark); }
+.pdp-meta { display: flex; align-items: center; gap: 14px; margin-top: 12px; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 13.5px; color: var(--slate-body); flex-wrap: wrap; }
+.star { color: var(--amber-text); }
+.pill-icon { stroke: currentColor; stroke-width: 2.4; fill: none; flex-shrink: 0; }
+.star-ic { width: 13px; height: 13px; vertical-align: -2px; fill: var(--amber-text); flex-shrink: 0; }
+.star-ic-lg { width: 15px; height: 15px; vertical-align: -3px; }
+.star-ic-empty { fill: none; stroke: var(--amber-text); stroke-width: 1.6; }
+
+.mode-toggle { display: flex; gap: 8px; margin-top: 18px; background: #F1F5F9; padding: 4px; border-radius: 10px; width: max-content; }
+.mode-btn { padding: 8px 18px; border-radius: 8px; font-size: 13.5px; cursor: pointer; color: var(--slate-body); }
+.mode-btn.active { background: #fff; color: var(--slate-dark); box-shadow: 0 1px 3px rgba(15,23,42,.12); }
+
+.price-box { margin-top: 16px; background: var(--neutral-bg); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; }
+.price-big { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 900; font-size: 32px; color: var(--slate-dark); }
+.price-note { font-size: 12.5px; color: var(--slate-body); margin-top: 6px; }
+.disc-pill { background: #FFFBEB; color: var(--amber-text); border: 1px solid #FDE68A; font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 12.5px; padding: 3px 8px; border-radius: 6px; }
+
+.tier-table { border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; margin-top: 10px; }
+.tier-head { display: grid; grid-template-columns: 1fr 1fr 1fr; background: #F1F5F9; font-size: 12.5px; color: var(--slate-body); padding: 10px 14px; }
+.tier-row { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 14px; border-top: 1px solid var(--border-subtle); font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 14px; }
+.tier-row.active { background: #EFF6FF; }
+.tier-save { color: var(--emerald-verified); }
+.notice-green { margin-top: 10px; background: var(--emerald-bg); border: 1px solid var(--emerald-border); color: var(--emerald-verified); font-size: 13px; padding: 10px 12px; border-radius: 9px; }
+
+.qty-stepper { display: flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; }
+.qty-btn { width: 38px; height: 40px; display: grid; place-items: center; cursor: pointer; color: #334155; font-size: 18px; }
+.qty-btn:hover { background: #F1F5F9; }
+.qty-val { width: 56px; text-align: center; font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 15px; }
+.qty-row { margin-top: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+.cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+
+.spec-desc { font-size: 14px; color: var(--slate-body); line-height: 1.75; }
+.spec-grid { display: grid; gap: 0; margin-top: 16px; border-top: 1px solid var(--border-subtle); }
+.spec-row { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border-subtle); font-size: 13.5px; }
+.spec-key { color: var(--slate-body); min-width: 120px; }
+
+.review-summary { display: flex; align-items: center; gap: 22px; margin: 16px 0; padding: 14px; background: var(--neutral-bg); border-radius: 12px; flex-wrap: wrap; }
+.review-score { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 900; font-size: 34px; color: var(--slate-dark); }
+.review-bars { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
+.bar-row { display: flex; align-items: center; gap: 10px; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; color: var(--slate-body); }
+.bar-track { flex: 1; height: 7px; border-radius: 4px; background: var(--border-subtle); overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: var(--amber-text); }
+.review-item { padding: 16px 0; border-top: 1px solid var(--border-subtle); display: flex; gap: 14px; }
+.review-avatar { width: 38px; height: 38px; border-radius: 50%; background: #DBEAFE; color: var(--brand-blue); display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
+.review-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.review-verified { font-size: 11.5px; color: var(--emerald-verified); background: var(--emerald-bg); border: 1px solid var(--emerald-border); padding: 2px 7px; border-radius: 5px; }
+.review-date { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 11.5px; color: #94A3B8; margin-left: auto; }
+.review-text { font-size: 13.5px; color: var(--slate-body); line-height: 1.65; margin-top: 6px; }
+
+.shop-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
+.shop-head { display: flex; align-items: center; gap: 12px; }
+.shop-logo { width: 46px; height: 46px; border-radius: 12px; overflow: hidden; background: #F1F5F9; flex-shrink: 0; position: relative; }
+.shop-verify-box { margin-top: 12px; background: var(--emerald-bg); border: 1px solid var(--emerald-border); border-radius: 10px; padding: 11px; }
+.shop-verify-title { display: flex; align-items: center; gap: 7px; color: var(--emerald-verified); font-size: 13px; font-weight: 500; }
+.shop-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
+.shop-btn { background: #fff; border: 1px solid var(--border-subtle); color: #334155; font-size: 13px; padding: 9px; border-radius: 9px; cursor: pointer; }
+.shop-btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+
+.ship-card select { width: 100%; height: 40px; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 0 10px; font-size: 13.5px; color: #334155; background: var(--neutral-bg); outline: none; }
+.carrier-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 9px 11px; font-size: 13px; }
+.protection-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 15px; }
+.protection-title { font-size: 13.5px; font-weight: 500; color: var(--brand-blue); margin-bottom: 8px; }
+.protection-text { font-size: 12.5px; color: #334155; line-height: 1.7; }
+
+/* ---------- Store (merchant profile) ---------- */
+.store-header { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; }
+.store-cover { position: relative; height: 180px; background: #EFF6FF; }
+.store-head-content { padding: 18px 20px; }
+.store-logo-box { width: 72px; height: 72px; border-radius: 16px; overflow: hidden; background: #F1F5F9; flex-shrink: 0; border: 1px solid var(--border-subtle); position: relative; }
+
+/* ---------- Cart / Checkout ---------- */
+.cart-group { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; }
+.cart-group-head { display: flex; align-items: center; gap: 9px; padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); }
+.verified-dot { width: 19px; height: 19px; border-radius: 50%; background: var(--emerald-verified); color: #fff; display: grid; place-items: center; font-size: 11px; flex-shrink: 0; }
+.cart-item { display: flex; gap: 14px; padding: 16px 18px; border-bottom: 1px solid #F1F5F9; }
+.cart-thumb { width: 84px; height: 84px; border-radius: 10px; overflow: hidden; background: #F1F5F9; flex-shrink: 0; position: relative; }
+.cart-item-controls { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.cart-remove { font-size: 12.5px; color: var(--slate-body); cursor: pointer; text-decoration: underline; }
+.cart-line-total { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 17px; color: var(--slate-dark); }
+.cart-unit { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; color: var(--slate-body); margin-top: 3px; }
+.voucher-note { padding: 12px 18px; font-size: 12.5px; color: var(--slate-body); display: flex; align-items: center; gap: 8px; }
+.voucher-pill { background: #FFFBEB; color: var(--amber-text); border: 1px solid #FDE68A; padding: 3px 8px; border-radius: 6px; }
+
+.summary-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px; }
+.summary-title { font-size: 16px; font-weight: 500; margin-bottom: 14px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 13.5px; }
+.summary-rows { display: flex; flex-direction: column; gap: 11px; }
+.summary-label { color: var(--slate-body); }
+.summary-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+.summary-total { display: flex; justify-content: space-between; align-items: baseline; }
+.summary-total-label { font-size: 15px; }
+.summary-total-value { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 900; font-size: 24px; color: var(--slate-dark); }
+.summary-fineprint { margin-top: 12px; font-size: 11.5px; color: var(--slate-body); line-height: 1.6; }
+
+.empty-cart { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 60px; text-align: center; }
+
+.steps-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 9px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; font-weight: 700; }
+.step-label { font-size: 13.5px; }
+.step-line { width: 36px; height: 1px; background: var(--border-subtle); }
+
+.address-box { border: 1.5px solid var(--brand-blue); border-radius: 11px; padding: 14px; background: var(--neutral-bg); }
+.address-name { font-size: 14px; color: var(--slate-dark); }
+.address-detail { font-size: 13px; color: var(--slate-body); line-height: 1.6; margin-top: 5px; }
+.address-tags { display: flex; gap: 8px; margin-top: 9px; }
+.tag-default { font-size: 11.5px; background: #EFF6FF; color: var(--brand-blue); border: 1px solid #BFDBFE; padding: 3px 8px; border-radius: 5px; }
+.tag-change { font-size: 11.5px; color: var(--brand-blue); cursor: pointer; }
+
+.option-row { display: flex; align-items: center; gap: 12px; border-radius: 11px; padding: 13px 14px; cursor: pointer; border: 1.5px solid var(--border-subtle); background: #fff; }
+.option-row.selected { border-color: var(--brand-blue); background: #EFF6FF; }
+.option-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #CBD5E1; display: grid; place-items: center; flex-shrink: 0; }
+.option-row.selected .option-dot { border-color: var(--brand-blue); }
+.option-dot-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; }
+.option-row.selected .option-dot-inner { background: var(--brand-blue); }
+.option-name { font-size: 14px; color: var(--slate-dark); }
+.option-sub { font-size: 12px; color: var(--slate-body); }
+.option-fee { font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 700; font-size: 14px; color: var(--slate-dark); }
+.option-badge { font-size: 11.5px; background: var(--emerald-bg); color: var(--emerald-verified); border: 1px solid var(--emerald-border); padding: 3px 8px; border-radius: 5px; }
+
+.voucher-form { display: flex; gap: 8px; margin-bottom: 14px; }
+.voucher-form input { flex: 1; height: 38px; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 0 11px; font-size: 13px; background: var(--neutral-bg); outline: none; }
+.voucher-form input:focus { border-color: var(--brand-blue); background: #fff; }
+.voucher-apply { background: #EFF6FF; border: 1px solid #BFDBFE; color: var(--brand-blue); font-size: 13px; padding: 0 14px; border-radius: 9px; cursor: pointer; }
+
+/* ---------- QR / Paid ---------- */
+.qr-screen { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
+.qr-card { width: 100%; max-width: 460px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 28px; text-align: center; }
+.qr-title { font-size: 19px; font-weight: 500; }
+.qr-sub { font-size: 13px; color: var(--slate-body); margin-top: 6px; }
+.qr-graphic-wrap { margin: 20px auto 0; width: 230px; height: 230px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; display: grid; place-items: center; }
+.qr-grid { display: grid; width: 100%; aspect-ratio: 1/1; }
+.qr-total { margin-top: 16px; font-family: 'Satoshi', 'Kanit', sans-serif; font-weight: 900; font-size: 30px; color: var(--slate-dark); }
+.qr-ref { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12.5px; color: var(--slate-body); margin-top: 4px; }
+.qr-status { margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--neutral-bg); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 11px; }
+.qr-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber-text); animation: pulseDot 1.2s infinite; }
+.qr-status-text { font-size: 13px; color: var(--slate-body); }
+.qr-back { margin-top: 12px; font-size: 13px; color: var(--slate-body); cursor: pointer; text-decoration: underline; }
+
+.paid-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 28px; }
+.paid-head { display: flex; align-items: center; gap: 14px; }
+.paid-check { width: 48px; height: 48px; border-radius: 50%; background: var(--emerald-bg); border: 1px solid var(--emerald-border); color: var(--emerald-verified); display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+.paid-title { font-size: 20px; font-weight: 500; }
+.paid-order { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 13px; color: var(--slate-body); margin-top: 3px; }
+.escrow-note { margin-top: 20px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 14px; font-size: 13px; color: #334155; line-height: 1.7; }
+.timeline-title { margin-top: 22px; font-size: 16px; font-weight: 500; margin-bottom: 14px; }
+.timeline-item { display: flex; gap: 14px; }
+.timeline-marker { display: flex; flex-direction: column; align-items: center; }
+.timeline-dot { width: 16px; height: 16px; border-radius: 50%; border: 3px solid; }
+.timeline-track { flex: 1; width: 2px; background: var(--border-subtle); min-height: 34px; }
+.timeline-body { padding-bottom: 18px; }
+.timeline-text { font-size: 14px; }
+.timeline-time { font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; color: #94A3B8; margin-top: 3px; }
+.paid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--brand-blue); color: #C7D2FE; margin-top: auto; }
+.footer-grid { max-width: 1280px; margin: 0 auto; padding: 38px 16px; display: grid; gap: 28px; }
+.footer-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.footer-mark { height: 32px; width: auto; display: block; filter: brightness(0) invert(1); }
+.footer-title { color: #fff; font-size: 14.5px; }
+.footer-address { font-size: 12.5px; line-height: 1.8; }
+.footer-col { display: flex; flex-direction: column; gap: 9px; font-size: 12.5px; }
+.footer-col-title { color: #fff; font-size: 13.5px; margin-bottom: 3px; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.14); }
+.footer-bottom-row { max-width: 1280px; margin: 0 auto; padding: 14px 16px; font-family: 'Satoshi', 'Kanit', sans-serif; font-size: 12px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- Cookie banner ---------- */
+.cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 80; display: flex; justify-content: center; }
+.cookie-card { max-width: 1000px; width: 100%; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 18px 44px rgba(15,23,42,.16); border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.cookie-text { flex: 1; min-width: 240px; font-size: 13px; color: var(--slate-body); line-height: 1.65; }
+.cookie-actions { display: flex; gap: 9px; }
+.cookie-secondary { background: #fff; border: 1px solid var(--border-subtle); color: #334155; font-size: 13px; padding: 10px 16px; border-radius: 9px; cursor: pointer; }
+.cookie-primary { background: var(--brand-blue); border: none; color: #fff; font-size: 13px; padding: 10px 20px; border-radius: 9px; cursor: pointer; }
+
+/* ---------- Responsive breakpoints ---------- */
+
+
+@media (min-width: 1040px) { .menu-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 700px) and (max-width: 1039px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 699px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+
+@media (min-width: 1040px) { .champ-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 700px) and (max-width: 1039px) { .champ-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 699px) { .champ-grid { grid-template-columns: 1fr; } }
+.champ-grid { display: grid; gap: 14px; margin-top: 18px; }
+
+@media (min-width: 1120px) { .feed-grid { grid-template-columns: repeat(5, minmax(0,1fr)); } }
+@media (min-width: 860px) and (max-width: 1119px) { .feed-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+@media (min-width: 560px) and (max-width: 859px) { .feed-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 559px) { .feed-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+@media (min-width: 1180px) {
+  .pdp-grid { grid-template-columns: minmax(0,420px) minmax(0,1fr) 300px; }
+  .gallery-card, .pdp-shop-col { position: sticky; top: 88px; }
+  .gallery-card { max-width: none; }
+}
+@media (max-width: 1179px) {
+  .pdp-grid { grid-template-columns: minmax(0,1fr); }
+  .gallery-card { max-width: 440px; }
+}
+
+@media (min-width: 1000px) {
+  .side-grid { grid-template-columns: minmax(0,1fr) 340px; }
+  .summary-card { position: sticky; top: 88px; }
+}
+@media (max-width: 999px) { .side-grid { grid-template-columns: minmax(0,1fr); } }
+.side-grid { display: grid; gap: 20px; align-items: start; }
+
+@media (min-width: 700px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 699px) { .spec-grid { grid-template-columns: 1fr; } }
+
+@media (min-width: 1040px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+@media (min-width: 760px) and (max-width: 1039px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 759px) { .footer-grid { grid-template-columns: 1fr; } }
+
+.pdp-side-col { display: flex; flex-direction: column; gap: 14px; }
+@media (min-width: 1180px) { .pdp-side-col { position: sticky; top: 88px; } }
+
+</style>
+</head>
+<body>
+<div id="app" class="page"></div>
+<script>
+'use strict';
+
+/* ============================== FLIP COUNTDOWN TRACKING ============================== */
+const _flipPrev = { h: null, m: null, s: null };
+
+/* ============================== DATA ============================== */
+
+const PRODUCTS = [
+  { id: 'p1', name: 'ผ้าไหมมัดหมี่ทอมือ ลายโบราณ ขนาด 2 เมตร', cat: 'งานหัตถกรรม', shop: 'บ้านไหมขอนแก่น', province: 'ขอนแก่น', price: 1290, old: 1720, rating: 4.9, sold: 1240, stock: 48, flash: true },
+  { id: 'p2', name: 'กาแฟอาราบิก้าดอยช้าง คั่วกลาง 500 กรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'ดอยช้าง โรสเตอร์', province: 'เชียงราย', price: 420, old: 520, rating: 4.8, sold: 8600, stock: 230, flash: true },
+  { id: 'p3', name: 'น้ำพริกกุ้งเสียบสูตรต้นตำรับ 200 กรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'ครัวคุณย่าภูเก็ต', province: 'ภูเก็ต', price: 180, old: 0, rating: 4.7, sold: 3120, stock: 410, flash: false },
+  { id: 'p4', name: 'เซรั่มสมุนไพรไทย สารสกัดขมิ้นชัน 30 มล.', cat: 'ความงาม', shop: 'สยามเฮิร์บแล็บ', province: 'นครปฐม', price: 690, old: 890, rating: 4.6, sold: 2050, stock: 87, flash: true },
+  { id: 'p5', name: 'กระเป๋าสานย่านลิเภา ทรงถือ งานคราฟต์', cat: 'งานหัตถกรรม', shop: 'ลิเภานครฯ', province: 'นครศรีธรรมราช', price: 2450, old: 2900, rating: 5.0, sold: 340, stock: 12, flash: true },
+  { id: 'p6', name: 'ข้าวหอมมะลิทุ่งกุลาร้องไห้ 5 กิโลกรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'สหกรณ์ข้าวร้อยเอ็ด', province: 'ร้อยเอ็ด', price: 320, old: 0, rating: 4.8, sold: 12400, stock: 900, flash: false },
+  { id: 'p7', name: 'เครื่องปั้นดินเผาด่านเกวียน แจกันทรงสูง', cat: 'ของตกแต่งบ้าน', shop: 'ด่านเกวียนสตูดิโอ', province: 'นครราชสีมา', price: 1580, old: 1980, rating: 4.7, sold: 210, stock: 24, flash: true },
+  { id: 'p8', name: 'สบู่สมุนไพรมังคุด แพ็ก 3 ก้อน', cat: 'ความงาม', shop: 'มังคุดโฮม', province: 'จันทบุรี', price: 245, old: 0, rating: 4.5, sold: 5600, stock: 520, flash: false },
+  { id: 'p9', name: 'ผ้าขาวม้าทอมือย้อมคราม ผืนใหญ่', cat: 'แฟชั่น', shop: 'ครามสกล', province: 'สกลนคร', price: 390, old: 490, rating: 4.9, sold: 1870, stock: 140, flash: true },
+  { id: 'p10', name: 'ทุเรียนหมอนทองอบกรอบ ฟรีซดราย 100 กรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'สวนระยองแท้', province: 'ระยอง', price: 560, old: 0, rating: 4.8, sold: 4300, stock: 260, flash: false },
+  { id: 'p11', name: 'โคมไฟไม้สักแกะสลัก ขนาดตั้งพื้น', cat: 'ของตกแต่งบ้าน', shop: 'สักทองลำปาง', province: 'ลำปาง', price: 3200, old: 3800, rating: 4.6, sold: 96, stock: 8, flash: false },
+  { id: 'p12', name: 'ชาอู่หลงดอยแม่สลอง เกรดพรีเมียม 200 กรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'แม่สลองที', province: 'เชียงราย', price: 480, old: 0, rating: 4.7, sold: 2760, stock: 180, flash: false },
+  { id: 'p13', name: 'เครื่องเงินสลักลาย กำไลข้อมือ', cat: 'แฟชั่น', shop: 'เงินวัวลาย', province: 'เชียงใหม่', price: 1850, old: 2200, rating: 4.9, sold: 430, stock: 31, flash: false },
+  { id: 'p14', name: 'น้ำผึ้งดอกลำไยแท้ 100% ขวด 1 กิโลกรัม', cat: 'อาหารและเครื่องดื่ม', shop: 'ผึ้งหลวงลำพูน', province: 'ลำพูน', price: 450, old: 0, rating: 4.8, sold: 6100, stock: 340, flash: false },
+  { id: 'p15', name: 'หมอนขิดยัดนุ่น งานทอพื้นบ้าน', cat: 'ของตกแต่งบ้าน', shop: 'ขิดอุบล', province: 'อุบลราชธานี', price: 890, old: 1100, rating: 4.6, sold: 520, stock: 64, flash: false }
+];
+
+const PRODUCT_QUERY = {
+  p1: 'Thai silk weaving loom',
+  p2: 'roasted coffee beans',
+  p3: 'Thai chili paste nam prik',
+  p4: 'turmeric root herbal',
+  p5: 'rattan basket weaving',
+  p6: 'jasmine rice',
+  p7: 'Dan Kwian pottery',
+  p8: 'handmade soap bar',
+  p9: 'indigo dyed cotton fabric',
+  p10: 'durian fruit',
+  p11: 'carved wooden lamp',
+  p12: 'oolong tea leaves',
+  p13: 'silver bracelet jewelry',
+  p14: 'honey jar',
+  p15: 'thai handwoven cushion'
+};
+
+const CATS = [
+  { n: 'อาหารและเครื่องดื่ม', g: 'อ', i: 'utensils' },
+  { n: 'ความงาม', g: 'ค', i: 'sparkles' },
+  { n: 'แฟชั่น', g: 'ฟ', i: 'shirt' },
+  { n: 'ของตกแต่งบ้าน', g: 'บ', i: 'home' },
+  { n: 'งานหัตถกรรม', g: 'ห', i: 'palette' },
+  { n: 'สุขภาพ', g: 'ส', i: 'heart' },
+  { n: 'เกษตร', g: 'ก', i: 'leaf' },
+  { n: 'แม่และเด็ก', g: 'ม', i: 'baby' },
+  { n: 'ของฝาก OTOP', g: 'ฝ', i: 'gift' },
+  { n: 'อุตสาหกรรม', g: 'ต', i: 'factory' }
+];
+
+const PROVINCES = ['ทั้งหมด', 'เชียงใหม่', 'ขอนแก่น', 'ภูเก็ต', 'นครศรีธรรมราช', 'ระยอง'];
+const ALL_PROVINCES = ['กรุงเทพมหานคร', 'เชียงใหม่', 'ขอนแก่น', 'ภูเก็ต', 'นครราชสีมา', 'สงขลา', 'อุบลราชธานี'];
+
+const HEROES = [
+  { t: 'มหกรรมสินค้า SME ไทย 2569', s: 'ลดสูงสุด 40% พร้อมคูปองส่งฟรีจาก สสว.', cta: 'ช้อปเลย' },
+  { t: 'โครงการส่งเสริมผู้ประกอบการรายย่อย', s: 'สมัครรับสิทธิ์เงินอุดหนุนการตลาดดิจิทัล', cta: 'สมัครรับสิทธิ์' },
+  { t: 'จัดซื้อภาครัฐจาก SME ที่ผ่านการรับรอง', s: 'ราคาขายส่งแบบขั้นบันไดพร้อมใบเสนอราคา', cta: 'ดูรายละเอียด' },
+  { t: 'สินค้าท้องถิ่นแต่ละภูมิภาค', s: 'ค้นหาผลิตภัณฑ์เด่นจากทั่วประเทศไทย', cta: 'สำรวจเลย' },
+  { t: 'ผลิตภัณฑ์ได้รับการรับรองคุณภาพ', s: 'ซื้อกับความมั่นใจจากผู้ประกอบการที่ตรวจสอบแล้ว', cta: 'เลือกซื้อ' },
+  { t: 'ค้นหาสินค้าใหม่และยอดนิยม', s: 'สำรวจผลิตภัณฑ์พิเศษที่เพิ่งเข้าระบบ', cta: 'ดูสินค้าใหม่' }
+];
+
+/* ============================== STATE ============================== */
+
+const orderId = 'OS' + Math.floor(2e7 + Math.random() * 8e7);
+let flashEnd = Date.now() + 5 * 3600e3 + 23 * 60e3;
+let qrEnd = 0;
+
+const state = {
+  screen: 'home', pid: 'p1', cart: [], query: '', province: 'ทั้งหมด', cat: null,
+  mode: 'retail', qty: 1, visible: 10, slide: 0, now: Date.now(),
+  ship: 'flash', pay: 'promptpay', voucher: '', voucherOk: false,
+  reviewFilter: 'ทั้งหมด', shipTo: 'กรุงเทพมหานคร', cookieOpen: true, menuOpen: false,
+  quoteSent: false, addedToast: false, shop: null,
+  vw: window.innerWidth
+};
+
+function setState(patch) {
+  Object.assign(state, typeof patch === 'function' ? patch(state) : patch);
+  render();
+}
+
+/* ============================== HELPERS ============================== */
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function baht(n) { return '฿' + Math.round(n).toLocaleString('en-US'); }
+function compact(n) { return n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1) + ' พัน' : String(n); }
+const STAR_PATH = 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L7.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L3.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z';
+function starIcon(size) { return `<svg viewBox="0 0 24 24" class="star-ic${size === 'lg' ? ' star-ic-lg' : ''}" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`; }
+function starIconEmpty(size) { return `<svg viewBox="0 0 24 24" class="star-ic star-ic-empty${size === 'lg' ? ' star-ic-lg' : ''}" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`; }
+function starRow(str, size) { return str.split('').map(c => c === '☆' ? starIconEmpty(size) : starIcon(size)).join(''); }
+function find(id) { return PRODUCTS.find(p => p.id === id) || PRODUCTS[0]; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function unitPrice(p, qty, mode) {
+  if (mode !== 'wholesale') return p.price;
+  if (qty >= 50) return Math.round(p.price * 0.77);
+  if (qty >= 10) return Math.round(p.price * 0.89);
+  return p.price;
+}
+function go(screen) { setState({ screen, menuOpen: false }); window.scrollTo(0, 0); }
+
+function addItem(p, qty, mode) {
+  const key = p.id + ':' + mode;
+  const cart = state.cart.slice();
+  const i = cart.findIndex(c => c.key === key);
+  if (i >= 0) cart[i] = { ...cart[i], qty: cart[i].qty + qty };
+  else cart.push({ key, id: p.id, qty, mode });
+  setState({ cart, addedToast: true });
+  clearTimeout(addItem._t);
+  addItem._t = setTimeout(() => setState({ addedToast: false }), 2200);
+}
+
+const HERO_IMAGES = [
+  'Thailand street market',
+  'Thai shop owner',
+  'Thailand government building Bangkok',
+  'Thai handicraft market stall',
+  'Thai food packaging product',
+  'Thailand supermarket shelf'
+];
+
+const CAT_KEYWORDS = {
+  'อาหารและเครื่องดื่ม': 'Thai food',
+  'ความงาม': 'natural cosmetics',
+  'แฟชั่น': 'Thai textile fashion',
+  'ของตกแต่งบ้าน': 'home decor ceramic',
+  'งานหัตถกรรม': 'handicraft craft',
+  'สุขภาพ': 'wellness herbal',
+  'เกษตร': 'farm agriculture',
+  'แม่และเด็ก': 'baby products',
+  'ของฝาก OTOP': 'Thailand souvenir',
+  'อุตสาหกรรม': 'factory industry'
+};
+function catKeyword(cat) { return CAT_KEYWORDS[cat] || 'Thailand'; }
+function productQuery(p) { return PRODUCT_QUERY[p.id] || catKeyword(p.cat); }
+
+const IMG_CACHE = new Map();
+const IMG_PENDING = new Set();
+
+function commonsSearchUrl(query) {
+  const q = encodeURIComponent('filetype:bitmap ' + query);
+  return `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=640&format=json&origin=*`;
+}
+
+function applyResolvedImage(query, url) {
+  document.querySelectorAll(`img[data-query="${CSS.escape(query)}"]`).forEach(img => { img.src = url; });
+}
+
+function resolveRealImage(query) {
+  if (IMG_CACHE.has(query) || IMG_PENDING.has(query)) return;
+  IMG_PENDING.add(query);
+  fetch(commonsSearchUrl(query)).then(r => r.json()).then(data => {
+    const pages = data.query && data.query.pages;
+    const first = pages && Object.values(pages)[0];
+    const info = first && first.imageinfo && first.imageinfo[0];
+    const url = info && (info.thumburl || info.url) || null;
+    IMG_CACHE.set(query, url);
+    IMG_PENDING.delete(query);
+    if (url) applyResolvedImage(query, url);
+  }).catch(() => { IMG_CACHE.set(query, null); IMG_PENDING.delete(query); });
+}
+
+function imgSlot(label, extraClass, query, seed) {
+  if (!query) return `<div class="img-slot ${extraClass || ''}">${esc(label)}</div>`;
+  const seedStr = encodeURIComponent(query + '-' + String(seed || label));
+  const fallback = `https://picsum.photos/seed/${seedStr}/640/640`;
+  const src = IMG_CACHE.get(query) || fallback;
+  resolveRealImage(query);
+  return `<img class="img-slot-photo ${extraClass || ''}" data-extra="${esc(extraClass || '')}" data-query="${esc(query)}" src="${src}" alt="${esc(label)}" loading="lazy">`;
+}
+
+function imgErrorFallback(e) {
+  const img = e.target;
+  if (!img || img.tagName !== 'IMG' || !img.classList.contains('img-slot-photo')) return;
+  const div = document.createElement('div');
+  div.className = 'img-slot ' + (img.dataset.extra || '');
+  div.textContent = img.alt || '';
+  img.replaceWith(div);
+}
+
+/* ============================== QR GRAPHIC ============================== */
+
+function qrGraphicHtml() {
+  const N = 25, seed = 7;
+  const inBox = (r, c, r0, c0) => r >= r0 && r < r0 + 7 && c >= c0 && c < c0 + 7;
+  const ring = (r, c, r0, c0) => {
+    const dr = r - r0, dc = c - c0;
+    const edge = dr === 0 || dr === 6 || dc === 0 || dc === 6;
+    const core = dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4;
+    return edge || core;
+  };
+  const finder = (r, c) => {
+    if (inBox(r, c, 0, 0)) return ring(r, c, 0, 0);
+    if (inBox(r, c, 0, N - 7)) return ring(r, c, 0, N - 7);
+    if (inBox(r, c, N - 7, 0)) return ring(r, c, N - 7, 0);
+    return null;
+  };
+  let cells = '';
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const f = finder(r, c);
+      const on = f === null ? ((r * 7 + c * 13 + ((r * c * seed) % 5)) % 3 === 0) : f;
+      cells += `<div style="background:${on ? '#1E293B' : 'transparent'}"></div>`;
+    }
+  }
+  return `<div class="qr-grid" style="grid-template-columns:repeat(${N},1fr)">${cells}</div>`;
+}
+
+/* ============================== DERIVED VIEW MODEL ============================== */
+
+function view() {
+  const st = state;
+  const vw = st.vw;
+  const pdpWide = vw >= 1180;
+  const feedCols = vw < 560 ? 2 : vw < 860 ? 3 : vw < 1120 ? 4 : 5;
+
+  const card = p => {
+    const hasDisc = !!p.old;
+    return {
+      ...p,
+      slot: 'img-' + p.id, ph: p.cat,
+      priceText: baht(p.price),
+      oldText: hasDisc ? baht(p.old) : '',
+      hasDisc,
+      discText: hasDisc ? '-' + Math.round((1 - p.price / p.old) * 100) + '%' : '',
+      soldText: 'ขายแล้ว ' + compact(p.sold),
+      ratingText: p.rating.toFixed(1)
+    };
+  };
+
+  const q = st.query.trim();
+  let feedAll = PRODUCTS.filter(p => {
+    if (st.cat && p.cat !== st.cat) return false;
+    if (!q) return true;
+    return (p.name + p.shop + p.province + p.cat).indexOf(q) >= 0;
+  });
+  const total = feedAll.length;
+  const feed = feedAll.slice(0, st.visible).map(card);
+
+  const remain = Math.max(0, flashEnd - st.now);
+  const p = find(st.pid);
+  const unit = unitPrice(p, st.qty, st.mode);
+  const isWholesale = st.mode === 'wholesale';
+
+  const cartItems = st.cart.map(c => {
+    const prod = find(c.id);
+    const u = unitPrice(prod, c.qty, c.mode);
+    return {
+      ...prod, key: c.key, qty: c.qty, mode: c.mode,
+      unitText: baht(u) + ' / ชิ้น',
+      modeText: c.mode === 'wholesale' ? 'ราคาขายส่ง (B2B)' : 'ราคาปลีก (B2C)',
+      lineTotal: baht(u * c.qty),
+      line: u * c.qty
+    };
+  });
+
+  const shipFees = { post: 35, flash: 45, kerry: 60 };
+  const subtotal = cartItems.reduce((a, b) => a + b.line, 0);
+  const shipFee = cartItems.length ? shipFees[st.ship] : 0;
+  const discount = st.voucherOk ? Math.round(subtotal * 0.1) : 0;
+  const grand = subtotal + shipFee - discount;
+
+  const groups = [];
+  cartItems.forEach(it => {
+    let g = groups.find(x => x.shop === it.shop);
+    if (!g) { g = { shop: it.shop, province: it.province, items: [], voucherText: 'ส่งฟรีเมื่อซื้อครบ ฿500 จากร้านนี้' }; groups.push(g); }
+    g.items.push(it);
+  });
+
+  const qrRemain = Math.max(0, qrEnd - st.now);
+
+  return {
+    st, vw, pdpWide, feedCols, feed, total, q, remain, p, unit, isWholesale,
+    cartItems, subtotal, shipFee, discount, grand, groups, qrRemain, card
+  };
+}
+
+/* ============================== RENDER: HEADER ============================== */
+
+function renderHeader(vm) {
+  const st = vm.st;
+  const cartCount = vm.cartItems.reduce((a, b) => a + b.qty, 0);
+  const suggestions = vm.q ? PRODUCTS.filter(x => (x.name + x.shop).indexOf(vm.q) >= 0).slice(0, 4) : [];
+
+  return `
+  <div class="utility-bar">
+    <div class="wrap">
+      <div class="utility-left">
+        <span class="gov-label">เว็บไซต์ทางการของ สสว.</span>
+        <span class="utility-sep">|</span>
+        <a href="#">พอร์ทัล OSMEP</a>
+        <a href="#">ศูนย์ช่วยเหลือ</a>
+        <a href="#">สมัครเป็นผู้ขาย</a>
+      </div>
+      <div class="utility-right">
+        <span class="lang-active">TH</span>
+        <span class="lang-inactive">EN</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-header">
+    <div class="header-row">
+      <div class="brand" data-action="goHome">
+        <img class="brand-mark" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCIgdmlld0JveD0iMCAwIDgxNSAyMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8yMDJfMTc3KSI+CjxtYXNrIGlkPSJtYXNrMF8yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2swXzIwMl8xNzcpIj4KPHBhdGggZD0iTTE4Ljg3MzcgNDQuNDgyNUM5LjA1MjM2IDUxLjk1MTggNC4wNzIzNiA2My4xNTMxIDQuMDcyMzYgNzcuNzU4NUM0LjA2ODM2IDc4LjY3MTggNC4xNjcwMyA4Ni45NTg1IDkuMjE1MDMgOTYuODc3MkMxMy44NjU3IDEwNi4wMTMgMjMuNzgxNyAxMTguMjgyIDQ0LjYxNjQgMTI0Ljg1NEM0NS43MjQ0IDEyNS4zNTYgNDYuODY3IDEyNS45MDQgNDguMDk5IDEyNi41MjRDNTUuMDMxIDEzMC4wMDggNjIuNDcyNCAxMzYuNjgyIDYyLjU2OTcgMTQ0Ljk2NkM2Mi42NTc3IDE1Mi4zNjQgNjAuNzE3NyAxNTcuMTMzIDUwLjc5MSAxNTguMDQ4QzM2LjE2OTcgMTU5LjM5MiAzMS42MTEgMTU2LjIzOCAzMC42Njg0IDE1NS4zOThMMjkuNzM5IDE1MS44NjZINC4wNzIzNlYxODAuOTRMOC41NjU2OSAxODIuMTg1QzEwLjE2NTcgMTgyLjYyOCAyNC42Nzc3IDE4Ni41MDggNDEuMjk5IDE4Ni41MDhDNTYuODY1NyAxODYuNTA4IDY5LjIwNTcgMTgzLjEyNSA3Ny45NzUgMTc2LjQ1NkM4Ny43OTUgMTY4Ljk4NiA5Mi43NzUgMTU3Ljc4NCA5Mi43NzUgMTQzLjE4QzkyLjc3OSAxNDIuMjY2IDkyLjY4MDQgMTMzLjk3NyA4Ny42MzI0IDEyNC4wNkM4Mi45ODMgMTE0LjkyNCA3My4wNjg0IDEwMi42NTYgNTIuMjM1IDk2LjA4NTFDNTEuMTI0NCA5NS41ODExIDQ5Ljk4MDQgOTUuMDMzMiA0OC43NDg0IDk0LjQxNDVDNDEuODE2NCA5MC45MjkyIDM0LjM3NjQgODQuMjU0NSAzNC4yNzc3IDc1Ljk2OTFDMzQuMTg4NCA2OC41NzMxIDM2LjEyODQgNjMuODA1MSA0Ni4wNTUgNjIuODg5MUM2MC42ODA0IDYxLjU0OTEgNjUuMjQzIDY0LjcwMzggNjYuMTc5IDY1LjUzODVMNjcuMTA4NCA2OS4wNzA1SDkyLjc3NVYzOS45OTcxTDg4LjI4MyAzOC43NTMxQzg2LjQzMjQgMzguMjM5OCA0Mi42NTc3IDI2LjM4NzggMTguODczNyA0NC40ODI1WiIgZmlsbD0iIzM3NzRDMyIvPgo8L2c+CjxtYXNrIGlkPSJtYXNrMV8yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2sxXzIwMl8xNzcpIj4KPHBhdGggZD0iTTMwOS4xNjQgNDIuOTYyNUgyODYuMTdIMjgzLjAyNkgyNzUuNTE2VjU5LjkyNzhMMjgyLjk3NCA2NS44OTU4VjE2My41NzRMMjc1LjUxNiAxNjkuNTQxVjE4Ni41MDhIMjg2LjE3SDMwOS4xNjRIMzcwLjM3NFYxNjQuMzgyVjE1Ny41ODZWMTUxLjYySDM1NS41ODlMMzQ4LjEzIDE1Ny41ODZIMzExLjk0NlYxMjkuMTk2SDM1MS41NjlWMTAwLjI3NEgzMTEuOTQ2VjcxLjg4MjVIMzQ4LjEzTDM1NS41ODkgNzcuODUwNUgzNzAuMzc0VjcxLjg4MjVWNjUuMDg2NVY0Mi45NjI1SDMxMS45NDZIMzA5LjE2NFoiIGZpbGw9IiMzNzc0QzMiLz4KPC9nPgo8bWFzayBpZD0ibWFzazJfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrMl8yMDJfMTc3KSI+CjxwYXRoIGQ9Ik00MjIuMjY3IDE3MS43ODFDNDIyLjI2NyAxNjMuNjQ4IDQxNS42NzMgMTU3LjA1NCA0MDcuNTQgMTU3LjA1NEMzOTkuNDA3IDE1Ny4wNTQgMzkyLjgxMyAxNjMuNjQ4IDM5Mi44MTMgMTcxLjc4MUMzOTIuODEzIDE3OS45MTQgMzk5LjQwNyAxODYuNTA4IDQwNy41NCAxODYuNTA4QzQxNS42NzMgMTg2LjUwOCA0MjIuMjY3IDE3OS45MTQgNDIyLjI2NyAxNzEuNzgxWiIgZmlsbD0iIzM3NzRDMyIvPgo8L2c+CjxtYXNrIGlkPSJtYXNrM18yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2szXzIwMl8xNzcpIj4KPHBhdGggZD0iTTY0Ny41NDIgOTAuNjkxM0w1MzYuMjE2IDkxLjI2ODZMNTU4LjQ3OCAxMTkuNzY1TDY2OS44MDYgMTE5LjE4N0w2NDcuNTQyIDkwLjY5MTNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPG1hc2sgaWQ9Im1hc2s0XzIwMl8xNzciIHN0eWxlPSJtYXNrLXR5cGU6bHVtaW5hbmNlIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCI+CjxwYXRoIGQ9Ik0wIC0wLjAwMDE0OTE5N0g4MTQuNDYzVjIyNy41NjJIMFYtMC4wMDAxNDkxOTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazRfMjAyXzE3NykiPgo8cGF0aCBkPSJNNjIwLjcyMyAxOTcuOTNMNjQyLjk4NyAyMjYuNDI2TDY2OS4yIDEyMy41NTZMNjM5LjYzNiAxMjMuNzFMNjIwLjcyMyAxOTcuOTNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPG1hc2sgaWQ9Im1hc2s1XzIwMl8xNzciIHN0eWxlPSJtYXNrLXR5cGU6bHVtaW5hbmNlIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCI+CjxwYXRoIGQ9Ik0wIC0wLjAwMDE0OTE5N0g4MTQuNDYzVjIyNy41NjJIMFYtMC4wMDAxNDkxOTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazVfMjAyXzE3NykiPgo8cGF0aCBkPSJNNjI3LjE1IDE0OC43MDRDNjMwLjkwMiAxNDAuNjU2IDYzMy44MTggMTMxLjY5IDYzMy41NzIgMTIzLjU1Nkg2MDEuMjkxQzYwMS4yOTEgMTIzLjU1NiA2MDAuMjMgMTI4LjI2NCA1OTguMzYzIDEzMy4zQzU5Ni42NzggMTM3LjU0NSA1OTQuNTkyIDE0MS42MyA1OTIuMTIyIDE0NS41MDlDNTc4LjY1OSAxNjYuNjQyIDU1NS42ODcgMTc5LjI2IDUzMC42NzEgMTc5LjI2QzQ5MC41MzEgMTc5LjI2IDQ1Ny44NzYgMTQ2LjYwNCA0NTcuODc2IDEwNi40NjVDNDU3Ljg3NiA2Ni4zMjUgNDkwLjUzMSAzMy42NjkgNTMwLjY3MSAzMy42NjlDNTUxLjEwOCAzMy42NjkgNTcwLjczMSA0Mi4zNDIzIDU4NC41MDQgNTcuNDY1TDYwOC41MzUgMzUuNTc1N0M1ODguNjE2IDEzLjcwNzcgNTYwLjIzNSAxLjE2NTAxIDUzMC42NzEgMS4xNjUwMUM0NzIuNjA4IDEuMTY1MDEgNDI1LjM3MSA0OC40MDIzIDQyNS4zNzEgMTA2LjQ2NUM0MjUuMzcxIDE2NC41MjYgNDcyLjYwOCAyMTEuNzY0IDUzMC42NzEgMjExLjc2NEM1NjIuNjIyIDIxMS43NjQgNTkyLjI1NSAxOTcuNTM0IDYxMi4xNTEgMTczLjE3M0w2MTIuMTU1IDE3My4xODFDNjEyLjE1NSAxNzMuMTgxIDYxMi4yNzIgMTczLjAzMyA2MTIuNDcxIDE3Mi43NzZDNjE0Ljk4NiAxNjkuNjY2IDYxNy4zNTEgMTY2LjQwMiA2MTkuNTM1IDE2Mi45NzNDNjIyLjQ0NiAxNTguNDA1IDYyNC45ODggMTUzLjYzNiA2MjcuMTUgMTQ4LjcwNFoiIGZpbGw9IiM3MDczNzgiLz4KPC9nPgo8bWFzayBpZD0ibWFzazZfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrNl8yMDJfMTc3KSI+CjxwYXRoIGQ9Ik03MDUuMDY0IDEuMTM4MDVDNjU0LjYxMyAxLjEzODA1IDYxMi4zNTMgMzYuODAwNyA2MDIuMTIgODQuMjM1NEg2MzUuNzI1QzY0NS4xNDUgNTQuOTIyIDY3Mi42NjEgMzMuNjQyMSA3MDUuMDY0IDMzLjY0MjFDNzQ1LjIxOSAzMy42NDIxIDc3Ny44ODUgNjYuMzEwMSA3NzcuODg1IDEwNi40NjNDNzc3Ljg4NSAxNDYuNjE4IDc0NS4yMTkgMTc5LjI4NiA3MDUuMDY0IDE3OS4yODZDNjkwLjU2NSAxNzkuMjg2IDY3Ny4wNTUgMTc1LjAwOSA2NjUuNjk1IDE2Ny42NzdMNjU3LjM3MyAyMDAuMzI3QzY3MS43MDQgMjA3LjYzOCA2ODcuOTAzIDIxMS43OSA3MDUuMDY0IDIxMS43OUM3NjMuMTQgMjExLjc5IDgxMC4zOTEgMTY0LjU0MSA4MTAuMzkxIDEwNi40NjNDODEwLjM5MSA0OC4zODc0IDc2My4xNCAxLjEzODA1IDcwNS4wNjQgMS4xMzgwNVoiIGZpbGw9IiM3MDczNzgiLz4KPC9nPgo8bWFzayBpZD0ibWFzazdfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrN18yMDJfMTc3KSI+CjxwYXRoIGQ9Ik0yNDYuMTA0IDE2Mi43M1Y2Ny4yMzA1TDI1MC42MTUgNjMuNjE0NVY0Mi45NjI1SDIzNS4yMjlIMjE5LjMyNEgyMTYuNDQ3TDE4NS45MTMgMTExLjM2MUwxNTUuMzggNDIuOTYyNUgxNTIuNTAzSDEyMS4yMTJWNjMuNjE0NUwxMjUuNzIxIDY3LjIzMDVWMTYyLjczTDExNi43MDEgMTY5Ljk1MlYxODYuNTA4SDE1Ny4yMTVWMTY2LjYzMkwxNTQuNjQzIDE2NC41NjhWMTEyLjIzN0wxNzQuNzIzIDE1Ny4yMjJIMTgwLjg5NUgxOTAuOTMySDE5Ny4xMDNMMjE3LjE4NCAxMTIuMjM2VjE2NC41NjZMMjE0LjYxMSAxNjYuNjNWMTg2LjUwOEgyNTUuMTI0VjE2OS45NTJMMjQ2LjEwNCAxNjIuNzNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8yMDJfMTc3Ij4KPHJlY3Qgd2lkdGg9IjgxNC40NjMiIGhlaWdodD0iMjI3LjU2MyIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K" alt="SME.GO">
+      </div>
+
+      <button class="menu-btn" data-action="toggleMenu">
+        <span class="menu-icon"><span></span><span></span><span></span></span>
+        หมวดหมู่
+      </button>
+
+      <div class="search-wrap">
+        <input class="search-input" id="searchInput" value="${esc(st.query)}" placeholder="ค้นหาสินค้า ร้านค้า หรือจังหวัด…">
+        <div class="search-btn">ค้น</div>
+        ${vm.q && st.screen === 'home' ? `
+        <div class="suggest-panel">
+          <div class="suggest-label">คำค้นหาแนะนำ</div>
+          ${suggestions.map(s => `<div class="suggest-item" data-action="pickSuggestion" data-id="${s.id}">${esc(s.name)}</div>`).join('')}
+        </div>` : ''}
+      </div>
+
+      <div class="action-hub">
+        <div class="hub-icon">รายการ</div>
+        <div class="hub-icon" data-action="goCart">
+          ตะกร้า
+          ${cartCount > 0 ? `<span class="hub-badge">${cartCount}</span>` : ''}
+        </div>
+        <div class="hub-sep"></div>
+        <div class="hub-profile">
+          <div class="hub-avatar">ก</div>
+          <div class="hub-name">กัญญา<div class="hub-verified">ยืนยันตัวตนแล้ว</div></div>
+        </div>
+      </div>
+    </div>
+
+    ${st.menuOpen ? `
+    <div class="menu-panel">
+      <div class="menu-grid">
+        ${CATS.map(c => `
+        <div class="menu-cell" data-action="pickCategory" data-cat="${esc(c.n)}">
+          <div class="menu-glyph"><svg class="lucide-icon" data-lucide="${c.i}"></svg></div>
+          <div class="menu-name">${esc(c.n)}</div>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+/* ============================== RENDER: HOME ============================== */
+
+function renderHome(vm) {
+  const st = vm.st;
+
+  const cdH = Math.floor(vm.remain / 3600e3);
+  const cdM = Math.floor(vm.remain / 60e3) % 60;
+  const cdS = Math.floor(vm.remain / 1000) % 60;
+  _flipPrev.h = cdH; _flipPrev.m = cdM; _flipPrev.s = cdS;
+
+  const flashItems = PRODUCTS.filter(x => x.flash).map(x => {
+    const c = vm.card(x);
+    const pct = Math.max(8, Math.min(92, Math.round(100 - x.stock / 5)));
+    return { ...c, stockPct: pct + '%', stockText: 'เหลือ ' + x.stock + ' ชิ้น' };
+  });
+
+  const champions = PRODUCTS.filter(x => st.province === 'ทั้งหมด' || x.province === st.province).slice(0, 4).map(x => ({
+    shop: x.shop, province: 'จ.' + x.province, level: 'Level 3',
+    blurb: 'ผู้ผลิต' + x.cat + 'ที่ได้รับการคัดเลือกเป็น SME Champion ประจำจังหวัด',
+    ratingText: x.rating.toFixed(1), ordersText: compact(x.sold), logoQuery: productQuery(x)
+  }));
+
+  const feedTitle = st.cat ? 'หมวด ' + st.cat : (vm.q ? 'ผลการค้นหา "' + vm.q + '"' : 'แนะนำสำหรับคุณ');
+
+  return `
+  <div data-screen-label="Home">
+    <div class="section">
+      <div class="hero-grid">
+        <div class="hero-main">
+          <div class="hero-track" id="heroTrack" style="transform:translateX(-${st.slide * 100}%)">
+            ${HEROES.map((h, i) => `
+            <div class="hero-slide">
+              ${imgSlot('แบนเนอร์แคมเปญ 1200×500', '', HERO_IMAGES[i], 'hero-banner-' + i)}
+              <div class="hero-caption">
+                <div class="hero-tag"><svg class="pill-icon" data-lucide="landmark"></svg>แคมเปญรัฐ</div>
+                <div class="hero-title">${esc(h.t)}</div>
+                <div class="hero-sub">${esc(h.s)}</div>
+                <button type="button" class="hero-cta">${esc(h.cta)}<svg class="pill-icon" data-lucide="arrow-right"></svg></button>
+              </div>
+            </div>`).join('')}
+          </div>
+          <button type="button" class="hero-arrow hero-arrow-left" data-action="prevSlide" aria-label="ก่อนหน้า"><svg class="pill-icon" data-lucide="chevron-left"></svg></button>
+          <button type="button" class="hero-arrow hero-arrow-right" data-action="nextSlide" aria-label="ถัดไป"><svg class="pill-icon" data-lucide="chevron-right"></svg></button>
+          <div class="hero-dots" id="heroDots">
+            ${HEROES.map((h, i) => `<div class="hero-dot" data-action="pickSlide" data-slide="${i}" style="width:${i === st.slide ? '20px' : '7px'};background:${i === st.slide ? '#FFFFFF' : 'rgba(255,255,255,.5)'}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card cat-grid">
+        ${CATS.map(c => `
+        <div class="cat-cell${st.cat === c.n ? ' active' : ''}" data-action="pickCategory" data-cat="${esc(c.n)}">
+          <div class="cat-glyph"><svg class="lucide-icon" data-lucide="${c.i}"></svg></div>
+          <div class="cat-name">${esc(c.n)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card" style="overflow:hidden">
+        <div class="flash-head">
+          <div class="flash-left">
+            <span class="flash-badge"><svg class="pill-icon" data-lucide="zap"></svg>ดีลจำกัดเวลา</span>
+            <div class="flash-title">แฟลชเซล ประจำวัน</div>
+          </div>
+          <div class="flash-right">
+            <span class="flash-label">สิ้นสุดใน</span>
+            <div class="countdown">
+              <div class="count-box"><div class="count-num" id="cd-h">${pad(cdH)}</div><div class="count-unit">HRS</div></div>
+              <div class="count-box"><div class="count-num" id="cd-m">${pad(cdM)}</div><div class="count-unit">MINS</div></div>
+              <div class="count-box"><div class="count-num" id="cd-s">${pad(cdS)}</div><div class="count-unit">SECS</div></div>
+            </div>
+            <a href="#" class="flash-link">ดูทั้งหมด</a>
+          </div>
+        </div>
+        <div class="flash-scroll">
+          ${flashItems.map(p => `
+          <div class="product-card flash-card" data-action="openProduct" data-id="${p.id}">
+            <div class="disc-badge">${esc(p.discText)}</div>
+            <div class="product-media">
+              ${imgSlot(p.ph, '', productQuery(p), p.id)}
+            </div>
+            <div class="product-body">
+              <div class="product-name">${esc(p.name)}</div>
+              <div class="price-row">
+                <span class="price-now">${p.priceText}</span>
+                <span class="price-old">${p.oldText}</span>
+              </div>
+              <div class="stock-track"><div class="stock-fill" style="width:${p.stockPct}"></div></div>
+              <div class="stock-text">${esc(p.stockText)}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card" style="padding:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div>
+            <div style="display:flex;align-items:center;gap:9px">
+              <span class="verified-dot" style="width:22px;height:22px;font-size:12px">✓</span>
+              <span style="font-size:19px;font-weight:600">สสว. Highlight — สุดยอด SME ประจำจังหวัด</span>
+            </div>
+            <div style="font-size:13px;color:var(--slate-body);margin-top:5px">ผู้ประกอบการที่ผ่านการตรวจสอบจากฐานข้อมูล สสว. ครบทั้ง 77 จังหวัด</div>
+          </div>
+          <div class="chip-row">
+            ${PROVINCES.map(n => `<div class="chip ${st.province === n ? 'active' : ''}" data-action="pickProvince" data-province="${esc(n)}">${esc(n)}</div>`).join('')}
+          </div>
+        </div>
+        <div class="champ-grid">
+          ${champions.map(m => `
+          <div class="champ-card">
+            <div class="champ-head">
+              <div class="champ-logo">${imgSlot('โลโก้', '', m.logoQuery, m.shop)}</div>
+              <div style="min-width:0">
+                <div class="champ-name">${esc(m.shop)}</div>
+                <div class="champ-province">${esc(m.province)}</div>
+              </div>
+            </div>
+            <div class="verified-chip">✓ สสว. Verified · ${esc(m.level)}</div>
+            <div class="champ-blurb">${esc(m.blurb)}</div>
+            <div class="champ-stats">
+              <span style="display:inline-flex;align-items:center;gap:3px">${starIcon()} ${m.ratingText}</span>
+              <span>${m.ordersText} ออร์เดอร์</span>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="padding-bottom:40px">
+      <div class="feed-head">
+        <div class="feed-title">${esc(feedTitle)}</div>
+        <div class="feed-count">${vm.total} รายการ</div>
+      </div>
+      <div class="feed-grid">
+        ${vm.feed.map(p => `
+        <div class="product-card feed-card" data-action="openProduct" data-id="${p.id}">
+          ${p.hasDisc ? `<div class="disc-badge">${esc(p.discText)}</div>` : ''}
+          <div class="product-media">
+            ${imgSlot(p.ph, '', productQuery(p), p.id)}
+          </div>
+          <div class="product-body">
+            <div class="verified-chip">✓ สสว. Verified</div>
+            <div class="product-name">${esc(p.name)}</div>
+            <div class="price-row">
+              <span class="price-now">${p.priceText}</span>
+              ${p.hasDisc ? `<span class="price-old">${p.oldText}</span>` : ''}
+            </div>
+            <div class="meta-row">
+              ${starIcon()}${p.ratingText}
+              <span class="meta-sep">|</span>
+              <span>${esc(p.soldText)}</span>
+            </div>
+            <div class="province-text">${esc(p.province)}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      ${st.visible < vm.total ? `
+      <div class="load-more-wrap">
+        <button class="btn btn-outline solid-hover" data-action="loadMore">โหลดสินค้าเพิ่มเติม</button>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: PDP ============================== */
+
+function renderPdp(vm) {
+  const st = vm.st, p = vm.p, unit = vm.unit, isWholesale = vm.isWholesale;
+  const reviewCount = Math.round(p.sold / 7);
+  const hasDisc = isWholesale ? unit < p.price : !!p.old;
+  const discText = isWholesale ? '-' + Math.round((1 - unit / p.price) * 100) + '%' : (p.old ? '-' + Math.round((1 - p.price / p.old) * 100) + '%' : '');
+  const priceNote = isWholesale ? 'ราคาต่อหน่วยปรับอัตโนมัติตามจำนวนที่สั่ง · ยังไม่รวมภาษีมูลค่าเพิ่ม' : 'รวมภาษีมูลค่าเพิ่มแล้ว · จัดส่งจาก จ.' + p.province;
+  const pdDesc = 'สินค้าจากผู้ประกอบการที่ขึ้นทะเบียนกับ สสว. ผ่านการตรวจสอบตัวตนด้วย SME One ID และตรวจคุณภาพตามมาตรฐานของโครงการ ผลิตในจังหวัด' + p.province + ' โดยชุมชนผู้ผลิตท้องถิ่น พร้อมใบรับรองแหล่งกำเนิดสินค้าและเอกสารประกอบการส่งออก';
+
+  const specs = [
+    { k: 'หมวดหมู่', v: p.cat }, { k: 'แหล่งผลิต', v: 'จ.' + p.province },
+    { k: 'ระดับการยืนยัน', v: 'Level 3 — Export Ready' }, { k: 'มาตรฐาน', v: 'OTOP 5 ดาว, อย.' },
+    { k: 'พร้อมส่ง', v: p.stock + ' ชิ้น' }, { k: 'รหัสสินค้า', v: p.id.toUpperCase() + '-2569' }
+  ];
+
+  const tiers = [
+    { range: '1 – 9 ชิ้น', price: baht(p.price), save: '—', lo: 1, hi: 9 },
+    { range: '10 – 49 ชิ้น', price: baht(Math.round(p.price * 0.89)), save: '11%', lo: 10, hi: 49 },
+    { range: '50 ชิ้นขึ้นไป', price: baht(Math.round(p.price * 0.77)), save: '23%', lo: 50, hi: 1e9 }
+  ];
+
+  const ratingBars = [5, 4, 3, 2, 1].map((s, i) => ({ star: s, n: [820, 190, 42, 11, 4][i], pct: [82, 19, 5, 2, 1][i] + '%' }));
+  const reviewChips = ['ทั้งหมด', '5 ดาว', 'มีรูปภาพ', 'ผู้ซื้อยืนยันแล้ว'];
+  const reviews = [
+    { initial: 'ณ', name: 'ณัฐพร ว.', stars: '★★★★★', date: '12 ส.ค. 2569', text: 'งานฝีมือประณีตมาก แพ็กมาอย่างดี ส่งถึงภายในสองวัน ตรงปกทุกอย่าง' },
+    { initial: 'ส', name: 'สุริยา ก.', stars: '★★★★★', date: '8 ส.ค. 2569', text: 'สั่งซื้อแบบขายส่งไปทำของชำร่วยบริษัท ผู้ขายออกใบกำกับภาษีให้เรียบร้อย' },
+    { initial: 'พ', name: 'พิมพ์ชนก อ.', stars: '★★★★☆', date: '2 ส.ค. 2569', text: 'คุณภาพดีตามราคา อยากให้มีตัวเลือกสีเพิ่มอีกหน่อย' }
+  ].filter(r => st.reviewFilter !== '5 ดาว' || r.stars.indexOf('☆') < 0);
+
+  const carriers = [
+    { name: 'ไปรษณีย์ไทย', eta: '3–4 วันทำการ', fee: baht(35) },
+    { name: 'Flash Express', eta: '1–2 วันทำการ', fee: baht(45) },
+    { name: 'Kerry Express', eta: '1 วันทำการ', fee: baht(60) }
+  ];
+
+  return `
+  <div data-screen-label="Product detail" class="container" style="padding:16px 16px 40px">
+    <div class="breadcrumb">
+      <span class="crumb-link" data-action="goHome">หน้าแรก</span> / ${esc(p.cat)} / <span class="crumb-current">${esc(p.name)}</span>
+    </div>
+
+    <div class="pdp-grid">
+      <div class="gallery-card" ${vm.pdpWide ? '' : 'style="max-width:440px"'}>
+        <div class="gallery-main">${imgSlot('ภาพสินค้าหลัก 1:1', '', productQuery(p), p.id + '-main')}</div>
+        <div class="gallery-thumbs">
+          ${[0, 1, 2, 3, 4].map(i => `<div class="gallery-thumb ${i === 0 ? 'active' : ''}">${imgSlot('มุมที่ ' + (i + 1), '', productQuery(p), p.id + '-' + i)}</div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="pdp-info-card">
+          <div class="pdp-badges">
+            <span class="badge-verified">✓ สสว. Verified SME</span>
+            <span class="badge-cat">${esc(p.cat)}</span>
+          </div>
+          <h1 class="pdp-title">${esc(p.name)}</h1>
+          <div class="pdp-meta">
+            <span>${starIcon()} <b style="color:var(--slate-dark)">${p.rating.toFixed(1)}</b></span>
+            <span class="meta-sep">|</span>
+            <span>${reviewCount} รีวิว</span>
+            <span class="meta-sep">|</span>
+            <span>ขายแล้ว ${compact(p.sold)} ชิ้น</span>
+          </div>
+
+          <div class="mode-toggle">
+            <div class="mode-btn ${!isWholesale ? 'active' : ''}" data-action="setRetail">ซื้อปลีก (B2C)</div>
+            <div class="mode-btn ${isWholesale ? 'active' : ''}" data-action="setWholesale">ซื้อส่ง (B2B)</div>
+          </div>
+
+          <div class="price-box">
+            <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+              <span class="price-big">${baht(unit)}</span>
+              ${hasDisc ? `
+              <span class="price-old" style="font-size:15px">${p.old ? baht(p.old) : baht(p.price)}</span>
+              <span class="disc-pill">${discText}</span>` : ''}
+            </div>
+            <div class="price-note">${priceNote}</div>
+          </div>
+
+          ${isWholesale ? `
+          <div style="margin-top:16px">
+            <div style="font-size:15px;font-weight:500;margin-bottom:10px">ราคาขายส่งแบบขั้นบันได</div>
+            <div class="tier-table">
+              <div class="tier-head"><span>จำนวน</span><span>ราคาต่อหน่วย</span><span>ประหยัด</span></div>
+              ${tiers.map(t => `
+              <div class="tier-row ${st.qty >= t.lo && st.qty <= t.hi ? 'active' : ''}">
+                <span style="color:#334155">${esc(t.range)}</span>
+                <span style="font-weight:700;color:var(--slate-dark)">${t.price}</span>
+                <span class="tier-save">${esc(t.save)}</span>
+              </div>`).join('')}
+            </div>
+            <button class="btn btn-outline solid-hover btn-block" style="margin-top:12px" data-action="requestQuote">ขอใบเสนอราคา (สำหรับองค์กร / จัดซื้อภาครัฐ)</button>
+            ${st.quoteSent ? `<div class="notice-green">ส่งคำขอใบเสนอราคาแล้ว ผู้ขายจะติดต่อกลับภายใน 24 ชั่วโมง</div>` : ''}
+          </div>` : ''}
+
+          <div class="qty-row">
+            <span style="font-size:13.5px;color:var(--slate-body)">จำนวน</span>
+            <div class="qty-stepper">
+              <div class="qty-btn" data-action="decQty">−</div>
+              <div class="qty-val">${st.qty}</div>
+              <div class="qty-btn" data-action="incQty">+</div>
+            </div>
+            <span style="font-size:12.5px;color:var(--slate-body)">คงเหลือ ${p.stock} ชิ้น</span>
+            <span style="margin-left:auto;font-size:13.5px;color:var(--slate-body)">รวม <b class="num" style="font-size:17px;color:var(--slate-dark)">${baht(unit * st.qty)}</b></span>
+          </div>
+
+          <div class="cta-row">
+            <button class="btn btn-outline" data-action="addToCart">เพิ่มลงตะกร้า</button>
+            <button class="btn btn-primary" data-action="buyNow">ซื้อทันที</button>
+          </div>
+          ${st.addedToast ? `<div class="notice-green">เพิ่มสินค้าลงตะกร้าแล้ว</div>` : ''}
+        </div>
+
+        <div class="pdp-info-card">
+          <div style="font-size:16px;font-weight:500;margin-bottom:12px">รายละเอียดสินค้า</div>
+          <div class="spec-desc">${esc(pdDesc)}</div>
+          <div class="spec-grid">
+            ${specs.map(s => `<div class="spec-row"><span class="spec-key">${esc(s.k)}</span><span style="color:var(--slate-dark)">${esc(s.v)}</span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="pdp-info-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="font-size:16px;font-weight:500">รีวิวจากผู้ซื้อ</div>
+            <div class="chip-row">
+              ${reviewChips.map(l => `<div class="chip small ${st.reviewFilter === l ? 'active' : ''}" data-action="pickReviewFilter" data-filter="${esc(l)}">${esc(l)}</div>`).join('')}
+            </div>
+          </div>
+          <div class="review-summary">
+            <div style="text-align:center">
+              <div class="review-score">${p.rating.toFixed(1)}</div>
+              <div style="color:var(--amber-text);font-size:13px">${starRow('★★★★★', 'lg')}</div>
+              <div style="font-size:11.5px;color:var(--slate-body);margin-top:3px">${reviewCount} รีวิว</div>
+            </div>
+            <div class="review-bars">
+              ${ratingBars.map(b => `
+              <div class="bar-row">
+                <span style="width:28px;display:inline-flex;align-items:center;gap:2px">${b.star}${starIcon()}</span>
+                <span class="bar-track"><span class="bar-fill" style="width:${b.pct}"></span></span>
+                <span style="width:38px;text-align:right">${b.n}</span>
+              </div>`).join('')}
+            </div>
+          </div>
+          <div>
+            ${reviews.map(r => `
+            <div class="review-item">
+              <div class="review-avatar">${esc(r.initial)}</div>
+              <div style="flex:1">
+                <div class="review-head">
+                  <span style="font-size:13.5px;color:var(--slate-dark)">${esc(r.name)}</span>
+                  <span style="color:var(--amber-text);font-size:12px">${starRow(r.stars)}</span>
+                  <span class="review-verified">ผู้ซื้อที่ยืนยันแล้ว</span>
+                  <span class="review-date">${esc(r.date)}</span>
+                </div>
+                <div class="review-text">${esc(r.text)}</div>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-side-col">
+        <div class="shop-card">
+          <div class="shop-head">
+            <div class="shop-logo">${imgSlot('โลโก้ร้าน', '', productQuery(p), p.shop)}</div>
+            <div style="min-width:0">
+              <div style="font-size:14.5px;font-weight:500;color:var(--slate-dark)">${esc(p.shop)}</div>
+              <div style="font-size:11.5px;color:var(--slate-body)">จ.${esc(p.province)}</div>
+            </div>
+          </div>
+          <div class="shop-verify-box">
+            <div class="shop-verify-title">✓ ยืนยันตัวตนด้วย SME One ID</div>
+            <div class="num" style="font-size:11.5px;color:var(--slate-body);margin-top:5px">Reg. 0105558xxxxx · TSIC 47912</div>
+            <div style="font-size:11.5px;color:var(--slate-body);margin-top:3px">ระดับการยืนยัน: Level 3 — Export Ready</div>
+          </div>
+          <div class="shop-actions">
+            <button class="shop-btn">แชทเลย</button>
+            <button class="shop-btn" data-action="visitStore" data-shop="${esc(p.shop)}">เยี่ยมชมร้าน</button>
+          </div>
+        </div>
+
+        <div class="shop-card ship-card">
+          <div style="font-size:14.5px;font-weight:500;margin-bottom:10px">คำนวณค่าจัดส่ง</div>
+          <select id="shipToSelect">
+            ${ALL_PROVINCES.map(v => `<option value="${esc(v)}" ${st.shipTo === v ? 'selected' : ''}>${esc(v)}</option>`).join('')}
+          </select>
+          <div style="margin-top:11px;display:flex;flex-direction:column;gap:8px">
+            ${carriers.map(c => `
+            <div class="carrier-row">
+              <div>
+                <div style="color:var(--slate-dark)">${esc(c.name)}</div>
+                <div style="font-size:11.5px;color:var(--slate-body)">${esc(c.eta)}</div>
+              </div>
+              <div class="num" style="font-weight:700;color:var(--slate-dark)">${c.fee}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <div class="protection-box">
+          <div class="protection-title">การคุ้มครองผู้ซื้อ</div>
+          <div class="protection-text">เงินจะถูกพักไว้ในระบบ Escrow ของ สสว. จนกว่าคุณจะกดยืนยันรับสินค้า หรือระบบขนส่งยืนยันการส่งมอบ + 3 วัน</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: CART ============================== */
+
+function renderCart(vm) {
+  const cartEmpty = vm.cartItems.length === 0;
+  return `
+  <div data-screen-label="Cart" class="container" style="padding:22px 16px 40px">
+    <h2 style="margin:0 0 16px;font-size:22px;font-weight:500">ตะกร้าสินค้า</h2>
+    ${cartEmpty ? `
+    <div class="empty-cart">
+      <div style="font-size:16px;color:#334155">ยังไม่มีสินค้าในตะกร้า</div>
+      <button class="btn btn-primary" style="margin-top:16px" data-action="goHome">เลือกซื้อสินค้า</button>
+    </div>` : `
+    <div class="side-grid">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        ${vm.groups.map(g => `
+        <div class="cart-group">
+          <div class="cart-group-head">
+            <span class="verified-dot">✓</span>
+            <span style="font-size:14.5px;font-weight:500">${esc(g.shop)}</span>
+            <span style="font-size:12px;color:var(--slate-body)">· ${esc(g.province)}</span>
+          </div>
+          ${g.items.map(it => `
+          <div class="cart-item">
+            <div class="cart-thumb">${imgSlot('สินค้า', '', productQuery(it), it.id)}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;color:#334155;line-height:1.45">${esc(it.name)}</div>
+              <div style="font-size:12px;color:var(--slate-body);margin-top:4px">${esc(it.modeText)}</div>
+              <div class="cart-item-controls">
+                <div class="qty-stepper">
+                  <div class="qty-btn" data-action="cartDec" data-key="${esc(it.key)}">−</div>
+                  <div class="qty-val" style="width:44px">${it.qty}</div>
+                  <div class="qty-btn" data-action="cartInc" data-key="${esc(it.key)}">+</div>
+                </div>
+                <span class="cart-remove" data-action="cartRemove" data-key="${esc(it.key)}">ลบ</span>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div class="cart-line-total">${it.lineTotal}</div>
+              <div class="cart-unit">${it.unitText}</div>
+            </div>
+          </div>`).join('')}
+          <div class="voucher-note">
+            <span class="voucher-pill">คูปองร้านค้า</span>
+            ${esc(g.voucherText)}
+          </div>
+        </div>`).join('')}
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-title">สรุปคำสั่งซื้อ</div>
+        <div class="summary-rows">
+          <div class="summary-row"><span class="summary-label">ยอดรวมสินค้า</span><span class="num" style="color:var(--slate-dark)">${baht(vm.subtotal)}</span></div>
+          <div class="summary-row"><span class="summary-label">ค่าจัดส่ง</span><span class="num" style="color:var(--slate-dark)">${baht(vm.shipFee)}</span></div>
+          <div class="summary-row"><span class="summary-label">ส่วนลดคูปองแพลตฟอร์ม</span><span class="num" style="color:var(--emerald-verified)">${vm.discount ? '−' + baht(vm.discount) : '฿0'}</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-total"><span class="summary-total-label">ยอดชำระทั้งหมด</span><span class="summary-total-value">${baht(vm.grand)}</span></div>
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px;padding:13px" data-action="goCheckout">ดำเนินการชำระเงิน</button>
+        <div class="summary-fineprint">คุ้มครองด้วยระบบ Escrow ของ สสว. · ชำระผ่าน PromptPay, บัตรเครดิต หรือ e-Wallet</div>
+      </div>
+    </div>`}
+  </div>`;
+}
+
+/* ============================== RENDER: CHECKOUT ============================== */
+
+function renderCheckout(vm) {
+  const st = vm.st;
+  const steps = [
+    { n: '1', label: 'ตะกร้า' }, { n: '2', label: 'ชำระเงิน' }, { n: '3', label: 'สำเร็จ' }
+  ];
+  const idx = { cart: 0, checkout: 1, qr: 1, paid: 2 }[st.screen] ?? 1;
+
+  const shipOptions = [
+    { v: 'post', name: 'ไปรษณีย์ไทย — ลงทะเบียน', eta: 'ถึงภายใน 3–4 วันทำการ', fee: baht(35) },
+    { v: 'flash', name: 'Flash Express', eta: 'ถึงภายใน 1–2 วันทำการ', fee: baht(45) },
+    { v: 'kerry', name: 'Kerry Express — ด่วนพิเศษ', eta: 'ถึงภายในวันถัดไป', fee: baht(60) }
+  ];
+  const payOptions = [
+    { v: 'promptpay', name: 'PromptPay QR', note: 'ยืนยันอัตโนมัติภายในไม่กี่วินาที', badge: true },
+    { v: 'card', name: 'บัตรเครดิต / เดบิต', note: 'รองรับ Visa, Mastercard, JCB ผ่าน Omise', badge: false },
+    { v: 'wallet', name: 'e-Wallet', note: 'TrueMoney Wallet, LINE Pay', badge: false },
+    { v: 'bank', name: 'โอนผ่านบัญชีธนาคาร', note: 'ยืนยันภายใน 1–2 ชั่วโมงทำการ', badge: false }
+  ];
+  const payLabel = st.pay === 'promptpay' ? 'สร้าง QR PromptPay' : 'ยืนยันการชำระเงิน';
+
+  return `
+  <div data-screen-label="Checkout" class="container" style="padding:22px 16px 40px">
+    <div class="steps-row">
+      ${steps.map((s, i) => `
+      <div class="step">
+        <span class="step-num" style="background:${i <= idx ? 'var(--brand-blue)' : 'var(--border-subtle)'};color:${i <= idx ? '#fff' : 'var(--slate-body)'}">${s.n}</span>
+        <span class="step-label" style="color:${i <= idx ? 'var(--slate-dark)' : 'var(--slate-body)'}">${s.label}</span>
+        <span class="step-line"></span>
+      </div>`).join('')}
+    </div>
+
+    <div class="side-grid">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="summary-card">
+          <div class="summary-title">ที่อยู่จัดส่ง</div>
+          <div class="address-box">
+            <div class="address-name">กัญญา ศรีสุวรรณ · <span class="num">081-234-5678</span></div>
+            <div class="address-detail">88/12 ซอยสุขุมวิท 31 แขวงคลองตันเหนือ เขตวัฒนา ${esc(st.shipTo)} 10110</div>
+            <div class="address-tags">
+              <span class="tag-default">ค่าเริ่มต้น</span>
+              <span class="tag-change">เปลี่ยนที่อยู่</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-title">รูปแบบการจัดส่ง</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            ${shipOptions.map(o => `
+            <div class="option-row ${st.ship === o.v ? 'selected' : ''}" data-action="pickShip" data-ship="${o.v}">
+              <span class="option-dot"><span class="option-dot-inner"></span></span>
+              <div style="flex:1">
+                <div class="option-name">${esc(o.name)}</div>
+                <div class="option-sub">${esc(o.eta)}</div>
+              </div>
+              <div class="option-fee">${o.fee}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-title">วิธีการชำระเงิน</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            ${payOptions.map(o => `
+            <div class="option-row ${st.pay === o.v ? 'selected' : ''}" data-action="pickPay" data-pay="${o.v}">
+              <span class="option-dot"><span class="option-dot-inner"></span></span>
+              <div style="flex:1">
+                <div class="option-name">${esc(o.name)}</div>
+                <div class="option-sub">${esc(o.note)}</div>
+              </div>
+              ${o.badge ? `<span class="option-badge">แนะนำ</span>` : ''}
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-title">สรุปการชำระเงิน</div>
+        <div class="voucher-form">
+          <input id="voucherInput" value="${esc(st.voucher)}" placeholder="กรอกโค้ดส่วนลด">
+          <button class="voucher-apply" data-action="applyVoucher">ใช้โค้ด</button>
+        </div>
+        <div class="summary-rows">
+          <div class="summary-row"><span class="summary-label">ยอดรวมสินค้า (${vm.cartItems.reduce((a, b) => a + b.qty, 0)} ชิ้น)</span><span class="num">${baht(vm.subtotal)}</span></div>
+          <div class="summary-row"><span class="summary-label">ค่าจัดส่ง</span><span class="num">${baht(vm.shipFee)}</span></div>
+          <div class="summary-row"><span class="summary-label">ส่วนลด</span><span class="num" style="color:var(--emerald-verified)">${vm.discount ? '−' + baht(vm.discount) : '฿0'}</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-total"><span class="summary-total-label">ยอดชำระ</span><span class="summary-total-value">${baht(vm.grand)}</span></div>
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px;padding:13px" data-action="payNow">${esc(payLabel)}</button>
+        <div class="summary-fineprint">การกดชำระเงินถือว่าคุณยอมรับเงื่อนไขการใช้งานและนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: QR ============================== */
+
+function renderQr(vm) {
+  const qrRemain = vm.qrRemain;
+  const qrCountdown = pad(Math.floor(qrRemain / 60e3)) + ':' + pad(Math.floor(qrRemain / 1000) % 60);
+  return `
+  <div data-screen-label="PromptPay QR" class="qr-screen">
+    <div class="qr-card">
+      <div class="qr-title">สแกนเพื่อชำระด้วย PromptPay</div>
+      <div class="qr-sub">เปิดแอปธนาคารของคุณและสแกน QR ด้านล่าง</div>
+      <div class="qr-graphic-wrap">${qrGraphicHtml()}</div>
+      <div class="qr-total">${baht(vm.grand)}</div>
+      <div class="qr-ref">Ref. ${orderId} · CRC verified</div>
+      <div class="qr-status">
+        <span class="qr-dot"></span>
+        <span class="qr-status-text">กำลังรอการยืนยันการชำระเงิน · หมดอายุใน <b class="num" id="qrCountdownVal" style="color:var(--slate-dark)">${qrCountdown}</b></span>
+      </div>
+      <button class="btn btn-green btn-block" style="margin-top:16px;padding:13px" data-action="confirmPaid">จำลองการชำระเงินสำเร็จ</button>
+      <div class="qr-back" data-action="goCart">ย้อนกลับไปแก้ไขคำสั่งซื้อ</div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: STORE ============================== */
+
+function renderStore(vm) {
+  const st = vm.st;
+  const shopName = st.shop || find(st.pid).shop;
+  const own = PRODUCTS.filter(x => x.shop === shopName);
+  const base = own[0] || PRODUCTS[0];
+  const more = PRODUCTS.filter(x => x.cat === base.cat && x.shop !== shopName).slice(0, 4);
+
+  const wrap = (x, key) => ({
+    ...x, ph: x.cat,
+    priceText: baht(x.price), oldText: x.old ? baht(x.old) : '', hasDisc: !!x.old,
+    discText: x.old ? '-' + Math.round((1 - x.price / x.old) * 100) + '%' : '',
+    soldText: 'ขายแล้ว ' + compact(x.sold), rating: x.rating.toFixed(1),
+    province: 'จ.' + x.province,
+    open: () => { setState({ pid: x.id, qty: 1, mode: 'retail', quoteSent: false }); go('pdp'); }
+  });
+
+  const storeStats = [
+    { k: 'คะแนนร้าน', v: base.rating.toFixed(1) },
+    { k: 'ออร์เดอร์', v: compact(own.reduce((a, b) => a + b.sold, 0)) },
+    { k: 'ตอบแชท', v: '98%' },
+    { k: 'สินค้า', v: own.length }
+  ];
+
+  const storeProducts = own.map(wrap);
+  const storeMore = more.map(wrap);
+
+  const storeGrid = vm.vw < 560 ? 'repeat(2,minmax(0,1fr))' : vm.vw < 1000 ? 'repeat(3,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))';
+  const storeHeadGrid = vm.vw < 1100 ? 'minmax(0,1fr)' : 'minmax(0,1fr) auto auto';
+  const storeBodyGrid = vm.vw < 1000 ? 'minmax(0,1fr)' : '300px minmax(0,1fr)';
+
+  return `
+  <div data-screen-label="Store" style="max-width:1280px;margin:0 auto;padding:16px 16px 40px;width:100%">
+    <div style="font-size:12.5px;color:var(--slate-body);margin-bottom:14px">
+      <span data-action="goHome" style="cursor:pointer;color:var(--brand-blue)">หน้าแรก</span> / ร้านค้า / <span style="color:#334155">${esc(shopName)}</span>
+    </div>
+
+    <div class="store-header">
+      <div class="store-cover">${imgSlot('ภาพปกร้าน 1280×360', '', 'Thailand shop storefront', 'store-cover-' + base.id)}</div>
+      <div class="store-head-content" style="display:grid;grid-template-columns:${storeHeadGrid};gap:20px;align-items:center">
+        <div style="display:flex;align-items:center;gap:14px;min-width:0">
+          <div class="store-logo-box">${imgSlot('โลโก้ร้าน', '', productQuery(base), 'logo-' + base.id)}</div>
+          <div style="min-width:0">
+            <div style="font-size:20px;font-weight:600;color:var(--slate-dark)">${esc(shopName)}</div>
+            <div style="font-size:13px;color:var(--slate-body);margin-top:3px">จ.${esc(base.province)} · เข้าร่วมแพลตฟอร์มปี 2565</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:#ECFDF5;border:1px solid #A7F3D0;color:#059669;font-size:12px;padding:4px 10px;border-radius:16px">✓ สสว. Verified SME · Level 3</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          ${storeStats.map(s => `
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;padding:11px 12px">
+            <div style="font-family:'Satoshi','Kanit',sans-serif;font-weight:700;font-size:17px;color:var(--slate-dark)">${esc(s.v)}</div>
+            <div style="font-size:11.5px;color:var(--slate-body);margin-top:2px">${esc(s.k)}</div>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <button class="btn btn-primary">ติดตามร้าน</button>
+          <button class="btn btn-outline">แชทเลย</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="store-body" style="display:grid;grid-template-columns:${storeBodyGrid};gap:16px;margin-top:16px;align-items:start">
+      <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:16px">
+        <div style="font-size:15px;font-weight:500;margin-bottom:10px">ข้อมูลร้านค้า</div>
+        <div style="font-size:13px;color:var(--slate-body);line-height:1.75">ผู้ประกอบการ SME จากจังหวัด${esc(base.province)} ผลิตและจำหน่าย${esc(base.cat)}ที่ขึ้นทะเบียนกับ สสว. ผ่านการยืนยันตัวตนด้วย SME One ID พร้อมรองรับคำสั่งซื้อทั้งแบบขายปลีกและขายส่งสำหรับองค์กรและการจัดซื้อภาครัฐ</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:0">
+          ${[
+            { k: 'เลขทะเบียนนิติบุคคล', v: '0105558xxxxx' },
+            { k: 'รหัส TSIC', v: '47912' },
+            { k: 'ระดับการยืนยัน', v: 'Level 3' },
+            { k: 'มาตรฐานที่ได้รับ', v: 'OTOP 5 ดาว, อย.' },
+            { k: 'เวลาจัดส่งโดยเฉลี่ย', v: 'ภายใน 1 วัน' }
+          ].map(i => `
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #E2E8F0;font-size:12.5px">
+            <span style="color:var(--slate-body)">${esc(i.k)}</span>
+            <span style="color:var(--slate-dark);text-align:right">${esc(i.v)}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+            <div style="font-size:17px;font-weight:600">สินค้าของร้าน</div>
+            <div style="font-size:12.5px;color:var(--slate-body);font-family:'Satoshi','Kanit',sans-serif">${storeProducts.length} รายการ</div>
+          </div>
+          <div class="products-grid" style="display:grid;gap:14px;grid-template-columns:${storeGrid}">
+            ${storeProducts.map(p => `
+            <div class="product-card" data-action="openProduct" data-id="${p.id}">
+              ${p.hasDisc ? `<div class="disc-badge">${esc(p.discText)}</div>` : ''}
+              <div class="product-media">
+                ${imgSlot(p.cat, '', productQuery(p), p.id + '-store')}
+              </div>
+              <div style="padding:11px 12px 13px;display:flex;flex-direction:column;gap:7px;flex:1">
+                <div style="font-size:13.5px;color:#334155;line-height:1.4;height:38px;overflow:hidden">${esc(p.name)}</div>
+                <div style="display:flex;align-items:baseline;gap:7px;margin-top:auto">
+                  <span style="font-family:'Satoshi','Kanit',sans-serif;font-weight:700;font-size:17px;color:var(--slate-dark)">${p.priceText}</span>
+                  ${p.hasDisc ? `<span style="font-family:'Satoshi','Kanit',sans-serif;font-size:12px;color:#94A3B8;text-decoration:line-through">${p.oldText}</span>` : ''}
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--slate-body);font-family:'Satoshi','Kanit',sans-serif">
+                  ${starIcon()}${p.rating}
+                  <span style="color:#CBD5E1">|</span>
+                  <span>${p.soldText}</span>
+                </div>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        ${storeMore.length > 0 ? `
+        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:16px;padding:18px">
+          <div style="font-size:17px;font-weight:600;margin-bottom:14px">สินค้าอื่นในหมวด ${esc(base.cat)}</div>
+          <div class="products-grid" style="display:grid;gap:14px;grid-template-columns:${storeGrid}">
+            ${storeMore.map(p => `
+            <div class="product-card" data-action="openProduct" data-id="${p.id}">
+              <div class="product-media">
+                ${imgSlot(p.cat, '', productQuery(p), p.id + '-more')}
+              </div>
+              <div style="padding:11px 12px 13px;display:flex;flex-direction:column;gap:6px;flex:1">
+                <div style="font-size:13.5px;color:#334155;line-height:1.4;height:38px;overflow:hidden">${esc(p.name)}</div>
+                <div style="font-family:'Satoshi','Kanit',sans-serif;font-weight:700;font-size:16px;color:var(--slate-dark);margin-top:auto">${p.priceText}</div>
+                <div style="font-size:11.5px;color:var(--slate-body)">${esc(p.shop)} · ${p.province}</div>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: PAID ============================== */
+
+function renderPaid(vm) {
+  const timeline = [
+    { title: 'ชำระเงินสำเร็จ — เงินเข้าระบบ Escrow', time: 'วันนี้ 14:32 น.', dot: '#059669', ring: '#A7F3D0', fg: '#1E293B' },
+    { title: 'ผู้ขายกำลังเตรียมพัสดุ', time: 'คาดการณ์ ภายใน 24 ชั่วโมง', dot: '#1D4ED8', ring: '#BFDBFE', fg: '#1E293B' },
+    { title: 'ขนส่งรับพัสดุแล้ว', time: 'รอดำเนินการ', dot: '#CBD5E1', ring: '#E2E8F0', fg: '#475569' },
+    { title: 'จัดส่งสำเร็จ — ปลดล็อกเงินให้ผู้ขาย', time: 'รอดำเนินการ', dot: '#CBD5E1', ring: '#E2E8F0', fg: '#475569' }
+  ];
+  return `
+  <div data-screen-label="Order confirmed" style="max-width:760px;margin:0 auto;padding:40px 16px;width:100%">
+    <div class="paid-card">
+      <div class="paid-head">
+        <div class="paid-check">✓</div>
+        <div>
+          <div class="paid-title">ชำระเงินสำเร็จ</div>
+          <div class="paid-order">Order ${orderId} · ${baht(vm.grand)}</div>
+        </div>
+      </div>
+      <div class="escrow-note">เงินของคุณถูกพักไว้ในระบบ Escrow ของ สสว. และจะโอนให้ผู้ขายหลังคุณยืนยันรับสินค้า หรือหลังระบบขนส่งยืนยันการส่งมอบ 3 วัน</div>
+      <div class="timeline-title">สถานะการจัดส่ง</div>
+      <div>
+        ${timeline.map(t => `
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <span class="timeline-dot" style="background:${t.dot};border-color:${t.ring}"></span>
+            <span class="timeline-track"></span>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-text" style="color:${t.fg}">${esc(t.title)}</div>
+            <div class="timeline-time">${esc(t.time)}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div class="paid-actions">
+        <button class="btn btn-outline solid-hover" data-action="goHome">เลือกซื้อสินค้าต่อ</button>
+        <button class="btn btn-primary">ติดตามคำสั่งซื้อ</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: FOOTER / COOKIE ============================== */
+
+function renderFooter() {
+  return `
+  <div class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <img class="footer-mark" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCIgdmlld0JveD0iMCAwIDgxNSAyMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8yMDJfMTc3KSI+CjxtYXNrIGlkPSJtYXNrMF8yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2swXzIwMl8xNzcpIj4KPHBhdGggZD0iTTE4Ljg3MzcgNDQuNDgyNUM5LjA1MjM2IDUxLjk1MTggNC4wNzIzNiA2My4xNTMxIDQuMDcyMzYgNzcuNzU4NUM0LjA2ODM2IDc4LjY3MTggNC4xNjcwMyA4Ni45NTg1IDkuMjE1MDMgOTYuODc3MkMxMy44NjU3IDEwNi4wMTMgMjMuNzgxNyAxMTguMjgyIDQ0LjYxNjQgMTI0Ljg1NEM0NS43MjQ0IDEyNS4zNTYgNDYuODY3IDEyNS45MDQgNDguMDk5IDEyNi41MjRDNTUuMDMxIDEzMC4wMDggNjIuNDcyNCAxMzYuNjgyIDYyLjU2OTcgMTQ0Ljk2NkM2Mi42NTc3IDE1Mi4zNjQgNjAuNzE3NyAxNTcuMTMzIDUwLjc5MSAxNTguMDQ4QzM2LjE2OTcgMTU5LjM5MiAzMS42MTEgMTU2LjIzOCAzMC42Njg0IDE1NS4zOThMMjkuNzM5IDE1MS44NjZINC4wNzIzNlYxODAuOTRMOC41NjU2OSAxODIuMTg1QzEwLjE2NTcgMTgyLjYyOCAyNC42Nzc3IDE4Ni41MDggNDEuMjk5IDE4Ni41MDhDNTYuODY1NyAxODYuNTA4IDY5LjIwNTcgMTgzLjEyNSA3Ny45NzUgMTc2LjQ1NkM4Ny43OTUgMTY4Ljk4NiA5Mi43NzUgMTU3Ljc4NCA5Mi43NzUgMTQzLjE4QzkyLjc3OSAxNDIuMjY2IDkyLjY4MDQgMTMzLjk3NyA4Ny42MzI0IDEyNC4wNkM4Mi45ODMgMTE0LjkyNCA3My4wNjg0IDEwMi42NTYgNTIuMjM1IDk2LjA4NTFDNTEuMTI0NCA5NS41ODExIDQ5Ljk4MDQgOTUuMDMzMiA0OC43NDg0IDk0LjQxNDVDNDEuODE2NCA5MC45MjkyIDM0LjM3NjQgODQuMjU0NSAzNC4yNzc3IDc1Ljk2OTFDMzQuMTg4NCA2OC41NzMxIDM2LjEyODQgNjMuODA1MSA0Ni4wNTUgNjIuODg5MUM2MC42ODA0IDYxLjU0OTEgNjUuMjQzIDY0LjcwMzggNjYuMTc5IDY1LjUzODVMNjcuMTA4NCA2OS4wNzA1SDkyLjc3NVYzOS45OTcxTDg4LjI4MyAzOC43NTMxQzg2LjQzMjQgMzguMjM5OCA0Mi42NTc3IDI2LjM4NzggMTguODczNyA0NC40ODI1WiIgZmlsbD0iIzM3NzRDMyIvPgo8L2c+CjxtYXNrIGlkPSJtYXNrMV8yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2sxXzIwMl8xNzcpIj4KPHBhdGggZD0iTTMwOS4xNjQgNDIuOTYyNUgyODYuMTdIMjgzLjAyNkgyNzUuNTE2VjU5LjkyNzhMMjgyLjk3NCA2NS44OTU4VjE2My41NzRMMjc1LjUxNiAxNjkuNTQxVjE4Ni41MDhIMjg2LjE3SDMwOS4xNjRIMzcwLjM3NFYxNjQuMzgyVjE1Ny41ODZWMTUxLjYySDM1NS41ODlMMzQ4LjEzIDE1Ny41ODZIMzExLjk0NlYxMjkuMTk2SDM1MS41NjlWMTAwLjI3NEgzMTEuOTQ2VjcxLjg4MjVIMzQ4LjEzTDM1NS41ODkgNzcuODUwNUgzNzAuMzc0VjcxLjg4MjVWNjUuMDg2NVY0Mi45NjI1SDMxMS45NDZIMzA5LjE2NFoiIGZpbGw9IiMzNzc0QzMiLz4KPC9nPgo8bWFzayBpZD0ibWFzazJfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrMl8yMDJfMTc3KSI+CjxwYXRoIGQ9Ik00MjIuMjY3IDE3MS43ODFDNDIyLjI2NyAxNjMuNjQ4IDQxNS42NzMgMTU3LjA1NCA0MDcuNTQgMTU3LjA1NEMzOTkuNDA3IDE1Ny4wNTQgMzkyLjgxMyAxNjMuNjQ4IDM5Mi44MTMgMTcxLjc4MUMzOTIuODEzIDE3OS45MTQgMzk5LjQwNyAxODYuNTA4IDQwNy41NCAxODYuNTA4QzQxNS42NzMgMTg2LjUwOCA0MjIuMjY3IDE3OS45MTQgNDIyLjI2NyAxNzEuNzgxWiIgZmlsbD0iIzM3NzRDMyIvPgo8L2c+CjxtYXNrIGlkPSJtYXNrM18yMDJfMTc3IiBzdHlsZT0ibWFzay10eXBlOmx1bWluYW5jZSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgxNSIgaGVpZ2h0PSIyMjgiPgo8cGF0aCBkPSJNMCAtMC4wMDAxNDkxOTdIODE0LjQ2M1YyMjcuNTYySDBWLTAuMDAwMTQ5MTk3WiIgZmlsbD0id2hpdGUiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI21hc2szXzIwMl8xNzcpIj4KPHBhdGggZD0iTTY0Ny41NDIgOTAuNjkxM0w1MzYuMjE2IDkxLjI2ODZMNTU4LjQ3OCAxMTkuNzY1TDY2OS44MDYgMTE5LjE4N0w2NDcuNTQyIDkwLjY5MTNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPG1hc2sgaWQ9Im1hc2s0XzIwMl8xNzciIHN0eWxlPSJtYXNrLXR5cGU6bHVtaW5hbmNlIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCI+CjxwYXRoIGQ9Ik0wIC0wLjAwMDE0OTE5N0g4MTQuNDYzVjIyNy41NjJIMFYtMC4wMDAxNDkxOTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazRfMjAyXzE3NykiPgo8cGF0aCBkPSJNNjIwLjcyMyAxOTcuOTNMNjQyLjk4NyAyMjYuNDI2TDY2OS4yIDEyMy41NTZMNjM5LjYzNiAxMjMuNzFMNjIwLjcyMyAxOTcuOTNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPG1hc2sgaWQ9Im1hc2s1XzIwMl8xNzciIHN0eWxlPSJtYXNrLXR5cGU6bHVtaW5hbmNlIiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4PSIwIiB5PSIwIiB3aWR0aD0iODE1IiBoZWlnaHQ9IjIyOCI+CjxwYXRoIGQ9Ik0wIC0wLjAwMDE0OTE5N0g4MTQuNDYzVjIyNy41NjJIMFYtMC4wMDAxNDkxOTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazVfMjAyXzE3NykiPgo8cGF0aCBkPSJNNjI3LjE1IDE0OC43MDRDNjMwLjkwMiAxNDAuNjU2IDYzMy44MTggMTMxLjY5IDYzMy41NzIgMTIzLjU1Nkg2MDEuMjkxQzYwMS4yOTEgMTIzLjU1NiA2MDAuMjMgMTI4LjI2NCA1OTguMzYzIDEzMy4zQzU5Ni42NzggMTM3LjU0NSA1OTQuNTkyIDE0MS42MyA1OTIuMTIyIDE0NS41MDlDNTc4LjY1OSAxNjYuNjQyIDU1NS42ODcgMTc5LjI2IDUzMC42NzEgMTc5LjI2QzQ5MC41MzEgMTc5LjI2IDQ1Ny44NzYgMTQ2LjYwNCA0NTcuODc2IDEwNi40NjVDNDU3Ljg3NiA2Ni4zMjUgNDkwLjUzMSAzMy42NjkgNTMwLjY3MSAzMy42NjlDNTUxLjEwOCAzMy42NjkgNTcwLjczMSA0Mi4zNDIzIDU4NC41MDQgNTcuNDY1TDYwOC41MzUgMzUuNTc1N0M1ODguNjE2IDEzLjcwNzcgNTYwLjIzNSAxLjE2NTAxIDUzMC42NzEgMS4xNjUwMUM0NzIuNjA4IDEuMTY1MDEgNDI1LjM3MSA0OC40MDIzIDQyNS4zNzEgMTA2LjQ2NUM0MjUuMzcxIDE2NC41MjYgNDcyLjYwOCAyMTEuNzY0IDUzMC42NzEgMjExLjc2NEM1NjIuNjIyIDIxMS43NjQgNTkyLjI1NSAxOTcuNTM0IDYxMi4xNTEgMTczLjE3M0w2MTIuMTU1IDE3My4xODFDNjEyLjE1NSAxNzMuMTgxIDYxMi4yNzIgMTczLjAzMyA2MTIuNDcxIDE3Mi43NzZDNjE0Ljk4NiAxNjkuNjY2IDYxNy4zNTEgMTY2LjQwMiA2MTkuNTM1IDE2Mi45NzNDNjIyLjQ0NiAxNTguNDA1IDYyNC45ODggMTUzLjYzNiA2MjcuMTUgMTQ4LjcwNFoiIGZpbGw9IiM3MDczNzgiLz4KPC9nPgo8bWFzayBpZD0ibWFzazZfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrNl8yMDJfMTc3KSI+CjxwYXRoIGQ9Ik03MDUuMDY0IDEuMTM4MDVDNjU0LjYxMyAxLjEzODA1IDYxMi4zNTMgMzYuODAwNyA2MDIuMTIgODQuMjM1NEg2MzUuNzI1QzY0NS4xNDUgNTQuOTIyIDY3Mi42NjEgMzMuNjQyMSA3MDUuMDY0IDMzLjY0MjFDNzQ1LjIxOSAzMy42NDIxIDc3Ny44ODUgNjYuMzEwMSA3NzcuODg1IDEwNi40NjNDNzc3Ljg4NSAxNDYuNjE4IDc0NS4yMTkgMTc5LjI4NiA3MDUuMDY0IDE3OS4yODZDNjkwLjU2NSAxNzkuMjg2IDY3Ny4wNTUgMTc1LjAwOSA2NjUuNjk1IDE2Ny42NzdMNjU3LjM3MyAyMDAuMzI3QzY3MS43MDQgMjA3LjYzOCA2ODcuOTAzIDIxMS43OSA3MDUuMDY0IDIxMS43OUM3NjMuMTQgMjExLjc5IDgxMC4zOTEgMTY0LjU0MSA4MTAuMzkxIDEwNi40NjNDODEwLjM5MSA0OC4zODc0IDc2My4xNCAxLjEzODA1IDcwNS4wNjQgMS4xMzgwNVoiIGZpbGw9IiM3MDczNzgiLz4KPC9nPgo8bWFzayBpZD0ibWFzazdfMjAyXzE3NyIgc3R5bGU9Im1hc2stdHlwZTpsdW1pbmFuY2UiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MTUiIGhlaWdodD0iMjI4Ij4KPHBhdGggZD0iTTAgLTAuMDAwMTQ5MTk3SDgxNC40NjNWMjI3LjU2MkgwVi0wLjAwMDE0OTE5N1oiIGZpbGw9IndoaXRlIi8+CjwvbWFzaz4KPGcgbWFzaz0idXJsKCNtYXNrN18yMDJfMTc3KSI+CjxwYXRoIGQ9Ik0yNDYuMTA0IDE2Mi43M1Y2Ny4yMzA1TDI1MC42MTUgNjMuNjE0NVY0Mi45NjI1SDIzNS4yMjlIMjE5LjMyNEgyMTYuNDQ3TDE4NS45MTMgMTExLjM2MUwxNTUuMzggNDIuOTYyNUgxNTIuNTAzSDEyMS4yMTJWNjMuNjE0NUwxMjUuNzIxIDY3LjIzMDVWMTYyLjczTDExNi43MDEgMTY5Ljk1MlYxODYuNTA4SDE1Ny4yMTVWMTY2LjYzMkwxNTQuNjQzIDE2NC41NjhWMTEyLjIzN0wxNzQuNzIzIDE1Ny4yMjJIMTgwLjg5NUgxOTAuOTMySDE5Ny4xMDNMMjE3LjE4NCAxMTIuMjM2VjE2NC41NjZMMjE0LjYxMSAxNjYuNjNWMTg2LjUwOEgyNTUuMTI0VjE2OS45NTJMMjQ2LjEwNCAxNjIuNzNaIiBmaWxsPSIjMzc3NEMzIi8+CjwvZz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8yMDJfMTc3Ij4KPHJlY3Qgd2lkdGg9IjgxNC40NjMiIGhlaWdodD0iMjI3LjU2MyIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K" alt="SME.GO">
+          <div class="footer-title">OSMEP National SME Marketplace</div>
+        </div>
+        <div class="footer-address">สำนักงานส่งเสริมวิสาหกิจขนาดกลางและขนาดย่อม (สสว.)<br>21 อาคารทีเอสที ถนนวิภาวดีรังสิต แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">สำหรับผู้ซื้อ</div>
+        <a href="#">วิธีสั่งซื้อ</a><a href="#">การชำระเงิน</a><a href="#">ติดตามพัสดุ</a><a href="#">คืนสินค้าและคืนเงิน</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">สำหรับผู้ขาย</div>
+        <a href="#">สมัคร SME One ID</a><a href="#">Seller Centre</a><a href="#">ค่าธรรมเนียม</a><a href="#">ศูนย์สิทธิประโยชน์ สสว.</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">นโยบาย</div>
+        <a href="#">ข้อกำหนดการใช้งาน</a><a href="#">นโยบายความเป็นส่วนตัว (PDPA)</a><a href="#">นโยบายคุกกี้</a><a href="#">ติดต่อเรา</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-row">
+        <span>© 2569 OSMEP. All rights reserved.</span>
+        <span>ข้อมูลจัดเก็บในประเทศไทย · TLS 1.3 · AES-256</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderCookie(st) {
+  if (!st.cookieOpen) return '';
+  return `
+  <div class="cookie-banner">
+    <div class="cookie-card">
+      <div class="cookie-text">เว็บไซต์นี้ใช้คุกกี้เพื่อพัฒนาประสบการณ์การใช้งานตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) คุณสามารถเลือกยินยอมได้</div>
+      <div class="cookie-actions">
+        <button class="cookie-secondary" data-action="closeCookie">ตั้งค่าคุกกี้</button>
+        <button class="cookie-primary" data-action="closeCookie">ยอมรับทั้งหมด</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================== RENDER: RELATED IMAGES ============================== */
+
+function renderRelatedImages(vm) {
+  const p = vm.p;
+  const pool = PRODUCTS.filter(x => !p || x.id !== p.id);
+  const items = (p ? pool.filter(x => x.cat === p.cat).concat(pool) : pool).slice(0, 6);
+
+  return `
+  <div class="section" style="padding-bottom:32px">
+    <div class="feed-head">
+      <div class="feed-title">รูปภาพที่เกี่ยวข้อง</div>
+    </div>
+    <div class="related-grid">
+      ${items.map(x => `
+      <div class="related-thumb" data-action="openProduct" data-id="${x.id}">
+        ${imgSlot(x.cat, '', productQuery(x), x.id)}
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ============================== MAIN RENDER ============================== */
+
+function render() {
+  const vm = view();
+  const st = vm.st;
+
+  let screenHtml = '';
+  if (st.screen === 'home') screenHtml = renderHome(vm);
+  else if (st.screen === 'pdp') screenHtml = renderPdp(vm);
+  else if (st.screen === 'store') screenHtml = renderStore(vm);
+  else if (st.screen === 'cart') screenHtml = renderCart(vm);
+  else if (st.screen === 'checkout') screenHtml = renderCheckout(vm);
+  else if (st.screen === 'qr') screenHtml = renderQr(vm);
+  else if (st.screen === 'paid') screenHtml = renderPaid(vm);
+
+  document.getElementById('app').innerHTML = `
+    ${renderHeader(vm)}
+    <div style="flex:1">
+      ${screenHtml}
+      ${renderRelatedImages(vm)}
+    </div>
+    ${renderFooter()}
+    ${renderCookie(st)}
+  `;
+  if (window.lucide) window.lucide.createIcons();
+}
+
+/* ============================== ACTIONS ============================== */
+
+const ACTIONS = {
+  goHome: () => { setState({ cat: null, query: '' }); go('home'); },
+  goCart: () => go('cart'),
+  goCheckout: () => go('checkout'),
+  toggleMenu: () => setState(s => ({ menuOpen: !s.menuOpen })),
+  closeCookie: () => setState({ cookieOpen: false }),
+
+  pickSuggestion: (el) => {
+    const id = el.dataset.id;
+    setState({ pid: id, qty: 1, mode: 'retail', query: '' });
+    go('pdp');
+  },
+  pickCategory: (el) => {
+    const cat = el.dataset.cat;
+    setState({ cat, query: '', visible: 10, menuOpen: false, screen: 'home' });
+    window.scrollTo(0, 520);
+  },
+  pickSlide: (el) => goToSlide(Number(el.dataset.slide)),
+  prevSlide: () => goToSlide((state.slide + HEROES.length - 1) % HEROES.length),
+  nextSlide: () => goToSlide((state.slide + 1) % HEROES.length),
+  pickProvince: (el) => setState({ province: el.dataset.province }),
+  loadMore: () => setState(s => ({ visible: s.visible + 5 })),
+  openProduct: (el) => {
+    setState({ pid: el.dataset.id, qty: 1, mode: 'retail', quoteSent: false });
+    go('pdp');
+  },
+
+  setRetail: () => setState({ mode: 'retail', qty: 1 }),
+  setWholesale: () => setState({ mode: 'wholesale', qty: 10 }),
+  requestQuote: () => setState({ quoteSent: true }),
+  incQty: () => setState(s => ({ qty: Math.min(find(s.pid).stock, s.qty + 1) })),
+  decQty: () => setState(s => ({ qty: Math.max(1, s.qty - 1) })),
+  addToCart: () => addItem(find(state.pid), state.qty, state.mode),
+  buyNow: () => { addItem(find(state.pid), state.qty, state.mode); go('cart'); },
+  pickReviewFilter: (el) => setState({ reviewFilter: el.dataset.filter }),
+  visitStore: (el) => { setState({ shop: el.dataset.shop }); go('store'); },
+
+  cartInc: (el) => setState(s => ({ cart: s.cart.map(x => x.key === el.dataset.key ? { ...x, qty: x.qty + 1 } : x) })),
+  cartDec: (el) => setState(s => ({ cart: s.cart.map(x => x.key === el.dataset.key ? { ...x, qty: Math.max(1, x.qty - 1) } : x) })),
+  cartRemove: (el) => setState(s => ({ cart: s.cart.filter(x => x.key !== el.dataset.key) })),
+
+  pickShip: (el) => setState({ ship: el.dataset.ship }),
+  pickPay: (el) => setState({ pay: el.dataset.pay }),
+  applyVoucher: () => setState({ voucherOk: true }),
+  payNow: () => { qrEnd = Date.now() + 15 * 60e3; go(state.pay === 'promptpay' ? 'qr' : 'paid'); },
+  confirmPaid: () => { setState({ cart: [] }); go('paid'); }
+};
+
+/* ============================== EVENT DELEGATION ============================== */
+
+function initEvents() {
+  const app = document.getElementById('app');
+
+  app.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    const fn = ACTIONS[el.dataset.action];
+    if (fn) fn(el);
+  });
+
+  app.addEventListener('input', (e) => {
+    if (e.target.id === 'searchInput') {
+      setState({ query: e.target.value, visible: 10, cat: null, screen: 'home' });
+      const input = document.getElementById('searchInput');
+      if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+    } else if (e.target.id === 'voucherInput') {
+      state.voucher = e.target.value;
+    }
+  });
+
+  app.addEventListener('change', (e) => {
+    if (e.target.id === 'shipToSelect') setState({ shipTo: e.target.value });
+  });
+
+  app.addEventListener('error', imgErrorFallback, true);
+}
+
+/* ============================== BOOT ============================== */
+
+function goToSlide(index) {
+  // Patch the track transform and dots in place instead of a full
+  // setState()/render() — a full rebuild would swap in a brand-new
+  // track element with the end transform already set, so the CSS
+  // transition would have nothing to animate from and the slide
+  // would just cut instead of sliding.
+  state.slide = index;
+  const track = document.getElementById('heroTrack');
+  if (track) track.style.transform = `translateX(-${index * 100}%)`;
+  const dots = document.getElementById('heroDots');
+  if (dots) {
+    dots.querySelectorAll('.hero-dot').forEach((d, i) => {
+      d.style.width = i === index ? '20px' : '7px';
+      d.style.background = i === index ? '#FFFFFF' : 'rgba(255,255,255,.5)';
+    });
+  }
+}
+
+function updateFlipDigit(id, text, changed) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  if (changed) {
+    el.classList.remove('flip');
+    void el.offsetWidth; // restart the animation
+    el.classList.add('flip');
+  }
+}
+
+function tickCountdowns() {
+  // Patch just the countdown digits in place instead of doing a full
+  // setState()/render() every second — a full innerHTML rebuild would
+  // tear down and recreate every card each tick, which visibly breaks
+  // (blinks) the :hover state of whatever card the pointer is over.
+  const nowTs = Date.now();
+  state.now = nowTs;
+
+  if (state.screen === 'home') {
+    const remain = Math.max(0, flashEnd - nowTs);
+    const h = Math.floor(remain / 3600e3);
+    const m = Math.floor(remain / 60e3) % 60;
+    const s = Math.floor(remain / 1000) % 60;
+    updateFlipDigit('cd-h', pad(h), _flipPrev.h !== null && _flipPrev.h !== h);
+    updateFlipDigit('cd-m', pad(m), _flipPrev.m !== null && _flipPrev.m !== m);
+    updateFlipDigit('cd-s', pad(s), _flipPrev.s !== null && _flipPrev.s !== s);
+    _flipPrev.h = h; _flipPrev.m = m; _flipPrev.s = s;
+  } else if (state.screen === 'qr') {
+    const el = document.getElementById('qrCountdownVal');
+    if (el) {
+      const qrRemain = Math.max(0, qrEnd - nowTs);
+      el.textContent = pad(Math.floor(qrRemain / 60e3)) + ':' + pad(Math.floor(qrRemain / 1000) % 60);
+    }
+  }
+}
+
+function boot() {
+  initEvents();
+  render();
+  setInterval(tickCountdowns, 1000);
+  setInterval(() => { if (state.screen === 'home') goToSlide((state.slide + 1) % HEROES.length); }, 6000);
+  window.addEventListener('resize', () => setState({ vw: window.innerWidth }));
+}
+
+document.addEventListener('DOMContentLoaded', boot);
+
+</script>
+</body>
+</html>
