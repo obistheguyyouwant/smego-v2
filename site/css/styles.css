@@ -51,7 +51,7 @@ img { max-width: 100%; display: block; }
 .page { min-height: 100vh; display: flex; flex-direction: column; background: var(--neutral-bg); }
 
 /* ---------- Utility bar ---------- */
-.utility-bar { background: linear-gradient(120deg, var(--brand-blue-deep), var(--brand-blue)); color: #C7D2FE; font-size: 12.5px; }
+.utility-bar { background: linear-gradient(120deg, var(--brand-blue-deep), var(--brand-blue)); color: #C7D2FE; font-size: 12.5px; max-width: 100%; }
 .utility-bar .wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px; height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .utility-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .utility-left .gov-label { display: flex; align-items: center; gap: 6px; color: #fff; font-weight: 500; }
