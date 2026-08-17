@@ -1,0 +1,6 @@
+{
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "site",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
