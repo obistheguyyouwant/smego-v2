@@ -653,7 +653,7 @@ function renderHome(vm) {
         </div>
         <div class="champ-grid">
           ${champions.map(m => `
-          <div class="champ-card">
+          <div class="champ-card" data-action="visitStore" data-shop="${esc(m.shop)}" style="cursor:pointer">
             <div class="champ-head">
               <div class="champ-logo">${imgSlot('โลโก้', '', m.logoQuery, m.shop)}</div>
               <div style="min-width:0">
