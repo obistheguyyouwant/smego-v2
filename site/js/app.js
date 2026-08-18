@@ -1549,7 +1549,7 @@ function renderSellerStock(vm) {
     </div>` : ''}
 
     <div class="aist-section-head">
-      <div class="aist-section-title">จัดการสต๊อก</div>
+      <div class="aist-section-title">สต๊อกสินค้า</div>
       <div class="aist-section-sub">ติดตามและจัดการสต๊อกสินค้าทั้งหมดอย่างมีประสิทธิภาพ</div>
     </div>
 
