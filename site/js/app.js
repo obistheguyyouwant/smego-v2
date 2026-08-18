@@ -497,7 +497,7 @@ function renderHeader(vm) {
       <div class="search-wrap">
         <input class="search-input" id="searchInput" value="${esc(st.query)}" placeholder="">
         <div class="search-typewriter" id="searchTypewriter" aria-hidden="true"><span id="twText"></span><span class="tw-cursor"></span></div>
-        <button class="visual-search-btn" id="visualSearchBtn" data-action="openVisualSearch" style="background:none;border:none;color:var(--slate-body);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;position:absolute;right:44px;top:50%;transform:translateY(-50%)" title="ค้นหาด้วยรูปภาพ" onmouseover="this.style.color='var(--brand-blue)'" onmouseout="this.style.color='var(--slate-body)'">
+        <button class="visual-search-btn" id="visualSearchBtn" data-action="openVisualSearch" style="background:none;border:none;color:var(--slate-body);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;position:absolute;right:65px;top:50%;transform:translateY(-50%)" title="ค้นหาด้วยรูปภาพ" onmouseover="this.style.color='var(--brand-blue)'" onmouseout="this.style.color='var(--slate-body)'">
           <svg style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
             <circle cx="12" cy="13" r="4"></circle>
