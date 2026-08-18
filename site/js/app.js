@@ -1500,8 +1500,8 @@ function renderSellerInsights(vm) {
   }).join('');
 
   const barSvg = `${barGridLines}${barRects}
-    <line x1="${barPadX}" y1="${barPadY + chartAreaH}" x2="${barChartW - barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--slate-body)" stroke-width="1.5"/>
-    <line x1="${barPadX}" y1="${barPadY}" x2="${barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--slate-body)" stroke-width="1.5"/>`;
+    <line x1="${barPadX}" y1="${barPadY + chartAreaH}" x2="${barChartW - barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--brand-blue)" stroke-width="1.5"/>
+    <line x1="${barPadX}" y1="${barPadY}" x2="${barPadX}" y2="${barPadY + chartAreaH}" stroke="#10b981" stroke-width="3"/>`;
 
   // Professional Line Chart with Gradient
   const lineChartW = 380, lineChartH = 220, linePadX = 40, linePadY = 30;
@@ -1536,8 +1536,8 @@ function renderSellerInsights(vm) {
     <path d="${areaPath}" fill="url(#lineGradient)"/>
     <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(46,107,255,0.15))"/>
     ${lineCircles}
-    <line x1="${linePadX}" y1="${linePadY + chartAreaLH}" x2="${lineChartW - linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--slate-body)" stroke-width="1.5"/>
-    <line x1="${linePadX}" y1="${linePadY}" x2="${linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--slate-body)" stroke-width="1.5"/>`;
+    <line x1="${linePadX}" y1="${linePadY + chartAreaLH}" x2="${lineChartW - linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--brand-blue)" stroke-width="1.5"/>
+    <line x1="${linePadX}" y1="${linePadY}" x2="${linePadX}" y2="${linePadY + chartAreaLH}" stroke="#10b981" stroke-width="3"/>`;
 
   return `
     <div class="aist-section-head" style="margin-bottom:28px">
