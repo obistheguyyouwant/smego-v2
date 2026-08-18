@@ -1558,13 +1558,13 @@ function renderSellerStock(vm) {
       <div style="flex:1;min-width:200px">
         <input type="text" placeholder="🔍 ค้นหาสินค้า..." style="width:100%;padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" data-action="filterStockSearch" />
       </div>
-      <select style="padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockStatus">
+      <select style="padding:10px 32px 10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockStatus">
         <option value="">สถานะทั้งหมด</option>
         <option value="good">พร้อมขาย</option>
         <option value="ok">ใกล้หมด</option>
         <option value="low">หมด</option>
       </select>
-      <select style="padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockCategory">
+      <select style="padding:10px 32px 10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockCategory">
         <option value="">หมวดหมู่ทั้งหมด</option>
         <option value="electronics">อิเล็กทรอนิกส์</option>
         <option value="fashion">แฟชั่น</option>
