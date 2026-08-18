@@ -1549,11 +1549,31 @@ function renderSellerStock(vm) {
     </div>` : ''}
 
     <div class="aist-section-head">
-      <div class="aist-section-title">${aiSparkIcon()}จัดการสต๊อกด้วย AI</div>
-      <div class="aist-section-sub">ติดตามสต๊อกสินค้าทั้งหมด พร้อมคำแนะนำการสั่งซื้อเพิ่มจาก AI แบบเรียลไทม์</div>
+      <div class="aist-section-title">จัดการสต๊อก</div>
+      <div class="aist-section-sub">ติดตามและจัดการสต๊อกสินค้าทั้งหมดอย่างมีประสิทธิภาพ</div>
     </div>
 
-    <div class="card" style="overflow:hidden;margin-top:16px">
+    <!-- Filter Section -->
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <div style="flex:1;min-width:200px">
+        <input type="text" placeholder="🔍 ค้นหาสินค้า..." style="width:100%;padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" data-action="filterStockSearch" />
+      </div>
+      <select style="padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockStatus">
+        <option value="">สถานะทั้งหมด</option>
+        <option value="good">พร้อมขาย</option>
+        <option value="ok">ใกล้หมด</option>
+        <option value="low">หมด</option>
+      </select>
+      <select style="padding:10px 12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;min-width:150px" data-action="filterStockCategory">
+        <option value="">หมวดหมู่ทั้งหมด</option>
+        <option value="electronics">อิเล็กทรอนิกส์</option>
+        <option value="fashion">แฟชั่น</option>
+        <option value="home">บ้านและสวน</option>
+      </select>
+      <button style="padding:10px 16px;border:1px solid var(--border-subtle);border-radius:8px;background:white;color:var(--slate-dark);font-weight:600;cursor:pointer;font-size:13px" data-action="resetStockFilters">รีเซ็ต</button>
+    </div>
+
+    <div class="card" style="overflow:hidden;margin-top:0">
       <div class="aist-table">
         <div class="aist-row aist-row-head aist-stock-row">
           <div>สินค้า</div><div>คงเหลือ</div><div>สถานะ</div><div>คาดว่าจะหมดใน</div><div>คำแนะนำจาก AI</div><div>ปรับสต๊อก</div>
@@ -2150,6 +2170,10 @@ const ACTIONS = {
   sellerToggleAddProduct: () => setState(s => ({ sellerShowAddProduct: !s.sellerShowAddProduct })),
   sellerBrowseProductImage: () => console.log('Browse product image'),
   sellerSaveProduct: () => alert('Product saved! (Demo mode - not persisted)'),
+  filterStockSearch: (el) => setState({ stockSearchFilter: el.value }),
+  filterStockStatus: (el) => setState({ stockStatusFilter: el.value }),
+  filterStockCategory: (el) => setState({ stockCategoryFilter: el.value }),
+  resetStockFilters: () => setState({ stockSearchFilter: '', stockStatusFilter: '', stockCategoryFilter: '' }),
 
   openAicwNew: () => setState({
     aicwOpen: true, aicwMode: 'new', aicwPid: null, aicwKeywords: '', aicwDraft: null, aicwGenerating: false,
