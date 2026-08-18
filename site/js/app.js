@@ -497,7 +497,7 @@ function renderHeader(vm) {
       <div class="search-wrap">
         <input class="search-input" id="searchInput" value="${esc(st.query)}" placeholder="">
         <div class="search-typewriter" id="searchTypewriter" aria-hidden="true"><span id="twText"></span><span class="tw-cursor"></span></div>
-        <button class="visual-search-btn" id="visualSearchBtn" data-action="openVisualSearch" style="background:none;border:none;color:var(--slate-body);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center" title="ค้นหาด้วยรูปภาพ">
+        <button class="visual-search-btn" id="visualSearchBtn" data-action="openVisualSearch" style="background:none;border:none;color:var(--slate-body);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;position:absolute;right:44px;top:50%;transform:translateY(-50%)" title="ค้นหาด้วยรูปภาพ" onmouseover="this.style.color='var(--brand-blue)'" onmouseout="this.style.color='var(--slate-body)'">
           <svg style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
             <circle cx="12" cy="13" r="4"></circle>
@@ -1159,7 +1159,7 @@ function renderStore(vm) {
         </div>
         <div style="display:flex;gap:9px;flex-wrap:wrap">
           <button class="btn btn-primary">ติดตามร้าน</button>
-          <button class="btn btn-outline">แชทเลย</button>
+          <button class="btn btn-outline" data-action="scoutToggle">แชทเลย</button>
         </div>
       </div>
     </div>
@@ -2117,7 +2117,7 @@ function render() {
     ${renderCookie(st)}
     ${renderAiWidget(st)}
     ${renderAicwModal(st)}
-    ${st.scoutOpen ? renderScoutChat(st) : `<button style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;background:var(--brand-blue);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(46,107,255,0.3);z-index:99;transition:transform 0.2s" data-action="scoutToggle" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg style="width:28px;height:28px;color:white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg></button>`}
+    ${st.scoutOpen ? renderScoutChat(st) : ''}
   `;
   if (window.lucide) window.lucide.createIcons();
 }
