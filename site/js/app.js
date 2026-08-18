@@ -885,7 +885,7 @@ function renderPdp(vm) {
             <div style="font-size:11.5px;color:var(--slate-body);margin-top:3px">ระดับผู้ขาย: Level 3 — ร้านค้ายอดนิยม</div>
           </div>
           <div class="shop-actions">
-            <button class="shop-btn">แชทเลย</button>
+            <button class="shop-btn" data-action="scoutToggle">แชทเลย</button>
             <button class="shop-btn" data-action="visitStore" data-shop="${esc(p.shop)}">เยี่ยมชมร้าน</button>
           </div>
         </div>
@@ -2107,6 +2107,8 @@ function render() {
   else if (st.screen === 'paid') screenHtml = renderPaid(vm);
   else if (st.screen === 'seller') screenHtml = renderSellerCentre(vm);
 
+  const scoutShopName = st.screen === 'pdp' ? vm.p.shop : (st.screen === 'store' ? st.shop : null);
+
   document.getElementById('app').innerHTML = `
     ${renderHeader(vm)}
     <div style="flex:1">
@@ -2117,7 +2119,7 @@ function render() {
     ${renderCookie(st)}
     ${renderAiWidget(st)}
     ${renderAicwModal(st)}
-    ${st.scoutOpen ? renderScoutChat(st) : ''}
+    ${st.scoutOpen ? renderScoutChat(st, scoutShopName) : ''}
   `;
   if (window.lucide) window.lucide.createIcons();
 }
@@ -2258,7 +2260,10 @@ function handleVisualSearch(files) {
   reader.readAsDataURL(file);
 }
 
-function renderScoutChat(st) {
+function renderScoutChat(st, shopName) {
+  const displayName = shopName || 'Scout';
+  const displaySubtitle = shopName ? 'ผู้ช่วยสต้อร์' : 'ผู้ช่วยค้นหา AI';
+
   return `
   <div style="position:fixed;bottom:24px;right:16px;width:360px;max-width:calc(100% - 32px);height:500px;background:white;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.15);display:flex;flex-direction:column;z-index:999;font-family:inherit">
     <!-- Header -->
@@ -2270,8 +2275,8 @@ function renderScoutChat(st) {
           </svg>
         </div>
         <div>
-          <div style="font-weight:700;font-size:14px;color:var(--slate-dark)">Scout</div>
-          <div style="font-size:11px;color:var(--slate-body)">ผู้ช่วยค้นหา AI</div>
+          <div style="font-weight:700;font-size:14px;color:var(--slate-dark)">${esc(displayName)}</div>
+          <div style="font-size:11px;color:var(--slate-body)">${displaySubtitle}</div>
         </div>
       </div>
       <button style="background:none;border:none;color:var(--slate-light);cursor:pointer;font-size:20px;padding:4px" data-action="scoutToggle">×</button>
