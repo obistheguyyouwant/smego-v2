@@ -2298,7 +2298,7 @@ function renderScoutChat(st) {
     <!-- Input -->
     <div style="padding:12px;border-top:1px solid var(--slate-light);display:flex;gap:8px">
       <input type="text" id="scoutInput" placeholder="หาสินค้า..." value="${esc(st.scoutInput)}" style="flex:1;padding:10px 12px;border:1px solid var(--slate-light);border-radius:6px;font-size:13px;font-family:inherit" />
-      <button style="background:var(--brand-blue);color:white;border:none;border-radius:6px;padding:10px 12px;cursor:pointer;font-weight:600;font-size:13px" data-action="scoutSend" ${st.scoutLoading ? 'disabled' : ''}>ส่ง</button>
+      <button style="background:var(--brand-blue);color:white;border:none;border-radius:6px;padding:10px 12px;cursor:pointer;font-weight:600;font-size:13px" data-action="scoutSend" ${st.scoutLoading ? 'disabled' : ''}>ค้นหา</button>
     </div>
   </div>
   `;
