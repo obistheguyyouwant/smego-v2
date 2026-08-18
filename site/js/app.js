@@ -1836,7 +1836,7 @@ function renderSellerInsights(vm) {
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:13px">
           <thead>
-            <tr style="border-bottom:1px solid var(--slate-light);background:var(--slate-lightest)">
+            <tr style="border-bottom:1px solid var(--slate-light);background:var(--slate-lightest);height:48px;vertical-align:middle">
               <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">ชื่อลูกค้า</th>
               <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">วันที่</th>
               <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">ราคา</th>
