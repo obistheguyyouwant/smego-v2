@@ -126,7 +126,11 @@ const state = {
   sellerStockLog: [], sellerInsightsRange: '7d',
   aicwOpen: false, aicwMode: 'edit', aicwPid: null, aicwKeywords: '',
   aicwGenerating: false, aicwDraft: null,
-  aicwImages: [], aicwDragOver: false, aicwEnhancing: []
+  aicwImages: [], aicwDragOver: false, aicwEnhancing: [],
+
+  scoutOpen: false, scoutMessages: [
+    { role: 'bot', text: 'สวัสดีค่ะ ฉันคือ Scout ผู้ช่วยค้นหาสินค้าของ SMEGO ✨ บอกดิฉันได้ว่าคุณกำลังมองหาอะไร เช่น:\n\n• "หูฟังไร้สายราคาไม่เกิน 1,500"\n• "รองเท้าวิ่งสำหรับมือใหม่"\n• "ของขวัญสำหรับเด็ก"\n• "เครื่องสำอางค์สำหรับผิวแพ้ง่าย"' }
+  ], scoutInput: '', scoutLoading: false
 };
 
 function setState(patch) {
@@ -2106,8 +2110,131 @@ function render() {
     ${renderCookie(st)}
     ${renderAiWidget(st)}
     ${renderAicwModal(st)}
+    ${st.scoutOpen ? renderScoutChat(st) : `<button style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;background:var(--brand-blue);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(46,107,255,0.3);z-index:99;transition:transform 0.2s" data-action="scoutToggle" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg style="width:28px;height:28px;color:white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg></button>`}
   `;
   if (window.lucide) window.lucide.createIcons();
+}
+
+/* ============================== SCOUT: INTENT DETECTION & PRODUCT MATCHING ============================== */
+
+const SCOUT_INTENTS = {
+  gift: { keywords: ['ของขวัญ', 'ของเล่น', 'ชำร่วย', 'คนเกิด', 'วันเกิด', 'ครบรอบ'] },
+  budget: { keywords: ['ไม่เกิน', 'ราคา', 'ประหยัด', 'ถูก', 'ราคาไม่เกิน', 'ไม่ถึง'] },
+  usecase: { keywords: ['สำหรับ', 'เพื่อ', 'ใช้สำหรับ', 'สำหรับเด็ก', 'สำหรับผู้ชาย', 'สำหรับผู้หญิง', 'สำหรับบ้าน'] },
+  quality: { keywords: ['คุณภาพดี', 'ทนทาน', 'ถูก', 'แท้', 'ปลอดภัย', 'สูง', 'ดี'] },
+  feature: { keywords: ['ไร้สาย', 'ดิจิทัล', 'อัตโนมัติ', 'กันน้ำ', 'ล้าหลัง', 'บลูทูธ', 'ระบายอากาศ'] }
+};
+
+function detectScoutIntents(query) {
+  const intents = [];
+  for (const [key, intent] of Object.entries(SCOUT_INTENTS)) {
+    if (intent.keywords.some(kw => query.indexOf(kw) !== -1)) {
+      intents.push(key);
+    }
+  }
+  return intents;
+}
+
+function extractBudget(query) {
+  const match = query.match(/(\d+(?:,\d+)*)/g);
+  if (!match) return null;
+  const nums = match.map(n => parseInt(n.replace(/,/g, '')));
+  return Math.min(...nums);
+}
+
+function scoutMatchProducts(query) {
+  const intents = detectScoutIntents(query);
+  const budget = extractBudget(query);
+
+  let matched = PRODUCTS.slice();
+
+  if (budget) matched = matched.filter(p => p.price <= budget);
+
+  for (const productId of Object.keys(AI_KEYWORDS)) {
+    const p = find(productId);
+    const keywords = AI_KEYWORDS[productId];
+    let score = 0;
+    keywords.forEach(kw => {
+      if (query.indexOf(kw) !== -1) score += 10;
+    });
+    p._scoutScore = score;
+  }
+
+  matched.sort((a, b) => {
+    const scoreA = (a._scoutScore || 0) + (a.rating * 2) - (a.price / 1000);
+    const scoreB = (b._scoutScore || 0) + (b.rating * 2) - (b.price / 1000);
+    return scoreB - scoreA;
+  });
+
+  return matched.slice(0, 4);
+}
+
+function renderScoutResults(products) {
+  if (products.length === 0) {
+    return `<div style="padding:12px;text-align:center;color:var(--slate-body);font-size:13px">ไม่พบสินค้าที่ตรงกับคำค้นหา ลองค้นหาด้วยคำอื่นดู</div>`;
+  }
+
+  return products.map(p => `
+    <div style="padding:12px;border-bottom:1px solid var(--slate-light);cursor:pointer" data-action="pickProduct" data-id="${p.id}">
+      <div style="display:flex;gap:10px">
+        <div style="width:60px;height:60px;background:var(--slate-lightest);border-radius:6px;flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px;color:var(--slate-dark);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:4px">${p.shop}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700;color:var(--brand-blue);font-size:14px">${baht(p.price)}</div>
+            <div style="font-size:11px;color:var(--slate-body)">⭐ ${p.rating.toFixed(1)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderScoutChat(st) {
+  return `
+  <div style="position:fixed;bottom:24px;right:16px;width:360px;max-width:calc(100% - 32px);height:500px;background:white;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.15);display:flex;flex-direction:column;z-index:999;font-family:inherit">
+    <!-- Header -->
+    <div style="padding:16px;border-bottom:1px solid var(--slate-light);display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;background:var(--brand-blue);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <svg style="width:18px;height:18px;color:white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--slate-dark)">Scout</div>
+          <div style="font-size:11px;color:var(--slate-body)">ผู้ช่วยค้นหา AI</div>
+        </div>
+      </div>
+      <button style="background:none;border:none;color:var(--slate-light);cursor:pointer;font-size:20px;padding:4px" data-action="scoutToggle">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+      ${st.scoutMessages.map(msg => `
+        <div style="display:flex;${msg.role === 'user' ? 'justify-content:flex-end' : 'justify-content:flex-start'}">
+          <div style="max-width:80%;padding:10px 12px;border-radius:8px;background:${msg.role === 'user' ? 'var(--brand-blue)' : 'var(--slate-lightest)'};color:${msg.role === 'user' ? 'white' : 'var(--slate-dark)'};font-size:13px;line-height:1.4;word-wrap:break-word">
+            ${msg.html ? msg.html : esc(msg.text)}
+          </div>
+        </div>
+      `).join('')}
+      ${st.scoutLoading ? `
+        <div style="display:flex;justify-content:flex-start">
+          <div style="padding:10px 12px;background:var(--slate-lightest);border-radius:8px">
+            <span style="font-size:13px;color:var(--slate-body)">กำลังค้นหา...</span>
+          </div>
+        </div>
+      ` : ''}
+    </div>
+
+    <!-- Input -->
+    <div style="padding:12px;border-top:1px solid var(--slate-light);display:flex;gap:8px">
+      <input type="text" id="scoutInput" placeholder="หาสินค้า..." value="${esc(st.scoutInput)}" style="flex:1;padding:10px 12px;border:1px solid var(--slate-light);border-radius:6px;font-size:13px;font-family:inherit" />
+      <button style="background:var(--brand-blue);color:white;border:none;border-radius:6px;padding:10px 12px;cursor:pointer;font-weight:600;font-size:13px" data-action="scoutSend" ${st.scoutLoading ? 'disabled' : ''}>ส่ง</button>
+    </div>
+  </div>
+  `;
 }
 
 /* ============================== ACTIONS ============================== */
@@ -2164,6 +2291,30 @@ const ACTIONS = {
   aiSubmit: () => submitAiMessage(state.aiDraft),
   aiOpenProduct: (el) => {
     setState({ pid: el.dataset.id, qty: 1, mode: 'retail', quoteSent: false, aiOpen: false });
+    go('pdp');
+  },
+
+  scoutToggle: () => setState(s => ({ scoutOpen: !s.scoutOpen })),
+  scoutSend: () => {
+    const input = document.getElementById('scoutInput');
+    if (!input || !input.value.trim()) return;
+    const userQuery = input.value.trim();
+    setState(s => ({
+      scoutMessages: [...s.scoutMessages, { role: 'user', text: userQuery }],
+      scoutInput: '',
+      scoutLoading: true
+    }));
+    setTimeout(() => {
+      const results = scoutMatchProducts(userQuery);
+      const resultHtml = renderScoutResults(results);
+      setState(s => ({
+        scoutMessages: [...s.scoutMessages, { role: 'bot', html: resultHtml }],
+        scoutLoading: false
+      }));
+    }, 800 + Math.random() * 400);
+  },
+  pickProduct: (el) => {
+    setState(s => ({ pid: el.dataset.id, qty: 1, mode: 'retail', scoutOpen: false }));
     go('pdp');
   },
 
@@ -2267,6 +2418,8 @@ function initEvents() {
       state.voucher = e.target.value;
     } else if (e.target.id === 'aiInputField') {
       state.aiDraft = e.target.value;
+    } else if (e.target.id === 'scoutInput') {
+      setState({ scoutInput: e.target.value });
     } else if (e.target.id === 'aicwKeywordsField') {
       state.aicwKeywords = e.target.value;
     } else if (e.target.id === 'aicwTitleField' && state.aicwDraft) {
@@ -2282,6 +2435,10 @@ function initEvents() {
     if (e.target.id === 'aiInputField' && e.key === 'Enter') {
       e.preventDefault();
       submitAiMessage(e.target.value);
+    } else if (e.target.id === 'scoutInput' && e.key === 'Enter') {
+      e.preventDefault();
+      const btn = document.querySelector('[data-action="scoutSend"]');
+      if (btn && !btn.disabled) btn.click();
     }
   });
 
