@@ -1670,7 +1670,7 @@ function renderSellerInsights(vm) {
   const barGridLines = Array.from({length: 5}, (_, i) => {
     const y = barPadY + (chartAreaH / 4) * i;
     const val = Math.round((maxSalesDay / 4) * (4 - i));
-    return `<line x1="${barPadX}" y1="${y}" x2="${barChartW - barPadX}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+    return `<line x1="0" y1="${y}" x2="${barChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
   }).join('');
 
   const barRects = dailySales.map((v, i) => {
@@ -1681,9 +1681,7 @@ function renderSellerInsights(vm) {
     return `<rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${isBlue ? 'var(--brand-blue)' : '#E0E9FF'}" rx="3" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.05))"/>`;
   }).join('');
 
-  const barSvg = `${barGridLines}${barRects}
-    <line x1="${barPadX}" y1="${barPadY + chartAreaH}" x2="${barChartW - barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--brand-blue)" stroke-width="1.5"/>
-    <line x1="${barPadX}" y1="${barPadY}" x2="${barPadX}" y2="${barPadY + chartAreaH}" stroke="#10b981" stroke-width="3"/>`;
+  const barSvg = `${barGridLines}${barRects}`;
 
   // Professional Line Chart with Gradient
   const lineChartW = 380, lineChartH = 220, linePadX = 40, linePadY = 30;
@@ -1694,7 +1692,7 @@ function renderSellerInsights(vm) {
 
   const lineGridLines = Array.from({length: 5}, (_, i) => {
     const y = linePadY + (chartAreaLH / 4) * i;
-    return `<line x1="${linePadX}" y1="${y}" x2="${lineChartW - linePadX}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+    return `<line x1="0" y1="${y}" x2="${lineChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
   }).join('');
 
   const linePoints = dailyRevenue.map((v, i) => ({
@@ -1717,9 +1715,7 @@ function renderSellerInsights(vm) {
     </linearGradient></defs>
     <path d="${areaPath}" fill="url(#lineGradient)"/>
     <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(46,107,255,0.15))"/>
-    ${lineCircles}
-    <line x1="${linePadX}" y1="${linePadY + chartAreaLH}" x2="${lineChartW - linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--brand-blue)" stroke-width="1.5"/>
-    <line x1="${linePadX}" y1="${linePadY}" x2="${linePadX}" y2="${linePadY + chartAreaLH}" stroke="#10b981" stroke-width="3"/>`;
+    ${lineCircles}`;
 
   return `
     <div class="aist-section-head" style="margin-bottom:28px">
