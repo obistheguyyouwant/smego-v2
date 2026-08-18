@@ -653,9 +653,9 @@ function renderHome(vm) {
         </div>
         <div class="champ-grid">
           ${champions.map(m => `
-          <div class="champ-card" style="cursor:pointer;transition:transform 0.2s,box-shadow 0.2s" data-action="visitStore" data-shop="${esc(m.shop)}" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.08)'">
+          <div class="champ-card">
             <div class="champ-head">
-              <div class="champ-logo" style="background:linear-gradient(135deg,${['#2563EB','#06B6D4','#DC2626','#EA580C'][champions.indexOf(m)]} 0%,${['#1E40AF','#0891B2','#991B1B','#C2410C'][champions.indexOf(m)]} 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;border-radius:8px">${m.shop.substring(0, 2).toUpperCase()}</div>
+              <div class="champ-logo">${imgSlot('โลโก้', '', m.logoQuery, m.shop)}</div>
               <div style="min-width:0">
                 <div class="champ-name">${esc(m.shop)}</div>
                 <div class="champ-province">${esc(m.province)}</div>
