@@ -1551,7 +1551,7 @@ function renderSellerStock(vm) {
     <div class="aist-section-head">
       <div class="aist-section-title">${aiSparkIcon()}จัดการสต๊อกด้วย AI</div>
       <div class="aist-section-sub">ติดตามสต๊อกสินค้าทั้งหมด พร้อมคำแนะนำการสั่งซื้อเพิ่มจาก AI แบบเรียลไทม์</div>
-    </div>`;
+    </div>
 
     <div class="card" style="overflow:hidden;margin-top:16px">
       <div class="aist-table">
