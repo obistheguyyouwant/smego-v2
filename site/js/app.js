@@ -1385,11 +1385,173 @@ function renderSellerStock(vm) {
     return { p, daysLeft, reorderQty, status };
   });
 
+  const showAddProduct = st.sellerShowAddProduct;
+
   return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <div>
+        <div class="aist-section-title" style="font-size:24px;margin-bottom:4px">จัดการสต๊อก</div>
+        <div style="font-size:13px;color:var(--slate-body)">ติดตามสต๊อกสินค้าทั้งหมด พร้อมคำแนะนำการสั่งซื้อเพิ่มจาก AI</div>
+      </div>
+      <button class="btn btn-primary" data-action="sellerToggleAddProduct" style="min-width:140px">+ เพิ่มสินค้า</button>
+    </div>
+
+    ${showAddProduct ? `
+    <div class="card" style="padding:28px;margin-bottom:24px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;margin-bottom:24px">เพิ่มสินค้าใหม่</div>
+
+      <div style="display:grid;grid-template-columns:180px 1fr 1fr 1fr;gap:20px;margin-bottom:24px">
+        <!-- Product Image -->
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px;font-weight:600">Product Image</div>
+          <div style="width:100%;aspect-ratio:1;border:2px dashed var(--border-subtle);border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--slate-lightest);cursor:pointer" data-action="sellerBrowseProductImage">
+            <svg class="pill-icon" style="width:40px;height:40px;color:var(--slate-body)" data-lucide="image-plus"></svg>
+          </div>
+          <button class="btn" style="width:100%;margin-top:8px;background:var(--brand-blue);color:white;font-weight:600;padding:10px" data-action="sellerBrowseProductImage">+ Upload</button>
+          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">Max 5MB<br/>Ratio 1:1</div>
+        </div>
+
+        <!-- Product Name & SKU -->
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Name *</div>
+          <input type="text" placeholder="Product Name" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
+
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Unit</div>
+          <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
+            <option>Please Select</option>
+            <option>ชิ้น</option>
+            <option>แกลลอน</option>
+            <option>กล่อง</option>
+          </select>
+        </div>
+
+        <!-- SKU & Brand -->
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">SKU</div>
+          <input type="text" placeholder="Product Name" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
+
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Brand</div>
+          <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
+            <option>Please Select</option>
+          </select>
+        </div>
+
+        <!-- Barcode & Category -->
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Barcode Type *</div>
+          <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;margin-bottom:16px">
+            <option>Code 128 (C128)</option>
+            <option>Code 39</option>
+            <option>EAN-13</option>
+          </select>
+
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Category</div>
+          <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
+            <option>Please Select</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px">
+        <!-- Sub Category & Business Location & Alert Quantity -->
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Sub Category</div>
+          <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
+            <option>Please Select</option>
+          </select>
+        </div>
+
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Business Locations</div>
+          <div style="padding:8px 12px;background:var(--slate-dark);color:white;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:6px;width:fit-content">
+            <span style="width:14px;height:14px;background:white;border-radius:2px"></span>
+            Sadax (BL001)
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Alert Quantity</div>
+          <input type="number" placeholder="Alert Quantity" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+      </div>
+
+      <!-- Product Description & Brochure -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Description</div>
+          <textarea placeholder="Write description ..." style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;min-height:120px;font-family:inherit;resize:none"></textarea>
+        </div>
+
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Brochure</div>
+          <div style="width:100%;padding:20px;border:2px dashed var(--border-subtle);border-radius:8px;text-align:center;cursor:pointer;background:var(--slate-lightest)">
+            <div style="font-size:13px;color:var(--slate-body);margin-bottom:8px">Choose File</div>
+            <div style="font-size:11px;color:var(--slate-body)">No file chosen</div>
+          </div>
+          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">Max 5MB<br/>Allowed: .pdf, .csv, .zip, .doc, .docx, .jpeg</div>
+        </div>
+      </div>
+
+      <!-- Checkboxes & Additional Fields -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:12px">
+            <input type="checkbox" checked />
+            <span style="font-size:13px;color:var(--slate-dark);font-weight:600">Manage Stock?</span>
+          </label>
+          <div style="font-size:12px;color:var(--slate-body)">Enable stock management at product level</div>
+        </div>
+
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:12px">
+            <input type="checkbox" checked />
+            <span style="font-size:13px;color:var(--slate-dark);font-weight:600">Enable Product description, IMEI or Serial Number</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Weight & Custom Fields -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px">
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Weight</div>
+          <input type="text" placeholder="Weight" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Custom Field1</div>
+          <input type="text" placeholder="Custom Field1" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Custom Field2</div>
+          <input type="text" placeholder="Custom Field2" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Custom Field3</div>
+          <input type="text" placeholder="Custom Field3" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Custom Field4</div>
+          <input type="text" placeholder="Custom Field4" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+        </div>
+      </div>
+
+      <div style="margin-bottom:24px">
+        <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Service staff timer/Preparation time (in minutes)</div>
+        <input type="number" placeholder="minutes" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end">
+        <button class="btn" style="padding:12px 24px;border:1px solid var(--border-subtle);border-radius:8px;background:white;color:var(--slate-dark);font-weight:600" data-action="sellerToggleAddProduct">Cancel</button>
+        <button class="btn btn-primary" style="padding:12px 24px;border-radius:8px;background:var(--brand-blue);color:white;font-weight:600" data-action="sellerSaveProduct">Save Product</button>
+      </div>
+    </div>` : ''}
+
     <div class="aist-section-head">
       <div class="aist-section-title">${aiSparkIcon()}จัดการสต๊อกด้วย AI</div>
       <div class="aist-section-sub">ติดตามสต๊อกสินค้าทั้งหมด พร้อมคำแนะนำการสั่งซื้อเพิ่มจาก AI แบบเรียลไทม์</div>
-    </div>
+    </div>`;
 
     <div class="card" style="overflow:hidden;margin-top:16px">
       <div class="aist-table">
@@ -1985,6 +2147,9 @@ const ACTIONS = {
   sellerSetRange: (el) => setState({ sellerInsightsRange: el.dataset.range }),
   sellerSetSalesTab: (el) => setState({ sellerSalesTab: el.dataset.tab }),
   sellerViewAllSales: () => setState({ sellerCurrentPage: 'sales' }),
+  sellerToggleAddProduct: () => setState({ sellerShowAddProduct: !st.sellerShowAddProduct }),
+  sellerBrowseProductImage: () => console.log('Browse product image'),
+  sellerSaveProduct: () => alert('Product saved! (Demo mode - not persisted)'),
 
   openAicwNew: () => setState({
     aicwOpen: true, aicwMode: 'new', aicwPid: null, aicwKeywords: '', aicwDraft: null, aicwGenerating: false,
