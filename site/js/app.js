@@ -1661,8 +1661,8 @@ function renderSellerInsights(vm) {
   const filteredOrders = currentTab === 'all' ? lastOrders : lastOrders.filter(o => o.status === currentTab);
 
   // Professional Bar Chart
-  const barChartW = 380, barChartH = 220, barPadX = 40, barPadY = 30;
-  const chartAreaW = barChartW - barPadX * 2, chartAreaH = barChartH - barPadY * 2;
+  const barChartW = 380, barChartH = 220, barPadX = 40, barPadY = 30, barBottomPad = 40;
+  const chartAreaW = barChartW - barPadX * 2, chartAreaH = barChartH - barPadY - barBottomPad;
   const maxSalesDay = Math.max(...dailySales);
   const barSpacing = chartAreaW / (dailySales.length + 1);
   const barWidth = barSpacing * 0.65;
@@ -1670,7 +1670,14 @@ function renderSellerInsights(vm) {
   const barGridLines = Array.from({length: 5}, (_, i) => {
     const y = barPadY + (chartAreaH / 4) * i;
     const val = Math.round((maxSalesDay / 4) * (4 - i));
-    return `<line x1="0" y1="${y}" x2="${barChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+    return `<line x1="0" y1="${y}" x2="${barChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>
+    <text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">${val}</text>`;
+  }).join('');
+
+  const barLabels = (st.sellerInsightsRange === '7d' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
+    Array.from({length: 30}, (_, i) => (i + 1).toString())).map((label, i) => {
+    const x = barPadX + barSpacing * (i + 1);
+    return `<text x="${x}" y="${barChartH - 8}" font-size="11" fill="var(--slate-body)" text-anchor="middle" font-family="inherit">${label}</text>`;
   }).join('');
 
   const barRects = dailySales.map((v, i) => {
@@ -1681,18 +1688,26 @@ function renderSellerInsights(vm) {
     return `<rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${isBlue ? 'var(--brand-blue)' : '#E0E9FF'}" rx="3" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.05))"/>`;
   }).join('');
 
-  const barSvg = `${barGridLines}${barRects}`;
+  const barSvg = `${barGridLines}${barRects}${barLabels}`;
 
   // Professional Line Chart with Gradient
-  const lineChartW = 380, lineChartH = 220, linePadX = 40, linePadY = 30;
-  const chartAreaLW = lineChartW - linePadX * 2, chartAreaLH = lineChartH - linePadY * 2;
+  const lineChartW = 380, lineChartH = 220, linePadX = 40, linePadY = 30, lineBottomPad = 40;
+  const chartAreaLW = lineChartW - linePadX * 2, chartAreaLH = lineChartH - linePadY - lineBottomPad;
   const maxRevenue = Math.max(...dailyRevenue);
   const minRevenue = Math.min(...dailyRevenue);
   const revRange = maxRevenue - minRevenue || maxRevenue;
 
   const lineGridLines = Array.from({length: 5}, (_, i) => {
     const y = linePadY + (chartAreaLH / 4) * i;
-    return `<line x1="0" y1="${y}" x2="${lineChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+    const val = Math.round(minRevenue + (revRange / 4) * (4 - i));
+    return `<line x1="0" y1="${y}" x2="${lineChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>
+    <text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">฿${val}</text>`;
+  }).join('');
+
+  const lineLabels = (st.sellerInsightsRange === '7d' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
+    Array.from({length: 30}, (_, i) => (i + 1).toString())).map((label, i) => {
+    const x = linePadX + (i / (dailyRevenue.length - 1)) * chartAreaLW;
+    return `<text x="${x}" y="${lineChartH - 8}" font-size="11" fill="var(--slate-body)" text-anchor="middle" font-family="inherit">${label}</text>`;
   }).join('');
 
   const linePoints = dailyRevenue.map((v, i) => ({
@@ -1715,7 +1730,7 @@ function renderSellerInsights(vm) {
     </linearGradient></defs>
     <path d="${areaPath}" fill="url(#lineGradient)"/>
     <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(46,107,255,0.15))"/>
-    ${lineCircles}`;
+    ${lineCircles}${lineLabels}`;
 
   return `
     <div class="aist-section-head" style="margin-bottom:28px">
@@ -1770,7 +1785,7 @@ function renderSellerInsights(vm) {
         </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">1,525</div>
         <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
-        <svg viewBox="0 0 ${barChartW} ${barChartH}" style="width:100%;height:200px;margin-top:12px;margin-left:-10px;margin-right:-10px">
+        <svg viewBox="0 0 ${barChartW} ${barChartH + 20}" style="width:100%;height:240px;margin-top:12px;margin-left:-10px;margin-right:-10px">
           ${barSvg}
         </svg>
       </div>
@@ -1782,7 +1797,7 @@ function renderSellerInsights(vm) {
         </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">฿20,462.89</div>
         <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
-        <svg viewBox="0 0 ${lineChartW} ${lineChartH}" style="width:100%;height:200px;margin-top:12px;margin-left:-10px;margin-right:-10px">
+        <svg viewBox="0 0 ${lineChartW} ${lineChartH + 20}" style="width:100%;height:240px;margin-top:12px;margin-left:-10px;margin-right:-10px">
           ${lineSvg}
         </svg>
       </div>
