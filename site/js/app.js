@@ -2147,7 +2147,7 @@ const ACTIONS = {
   sellerSetRange: (el) => setState({ sellerInsightsRange: el.dataset.range }),
   sellerSetSalesTab: (el) => setState({ sellerSalesTab: el.dataset.tab }),
   sellerViewAllSales: () => setState({ sellerCurrentPage: 'sales' }),
-  sellerToggleAddProduct: () => setState({ sellerShowAddProduct: !st.sellerShowAddProduct }),
+  sellerToggleAddProduct: () => setState(s => ({ sellerShowAddProduct: !s.sellerShowAddProduct })),
   sellerBrowseProductImage: () => console.log('Browse product image'),
   sellerSaveProduct: () => alert('Product saved! (Demo mode - not persisted)'),
 
