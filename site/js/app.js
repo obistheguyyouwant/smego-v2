@@ -1681,8 +1681,8 @@ function renderSellerInsights(vm) {
   const barGridLines = Array.from({length: 5}, (_, i) => {
     const y = barPadY + (chartAreaH / 4) * i;
     const val = Math.round((maxSalesDay / 4) * (4 - i));
-    return `<line x1="0" y1="${y}" x2="${barChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>
-    <text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">${val}</text>`;
+    return `<text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">${val}</text>
+    <line x1="30" y1="${y}" x2="${barChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
   }).join('');
 
   const barLabels = (st.sellerInsightsRange === '7d' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
@@ -1711,8 +1711,8 @@ function renderSellerInsights(vm) {
   const lineGridLines = Array.from({length: 5}, (_, i) => {
     const y = linePadY + (chartAreaLH / 4) * i;
     const val = Math.round(minRevenue + (revRange / 4) * (4 - i));
-    return `<line x1="0" y1="${y}" x2="${lineChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>
-    <text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">฿${val}</text>`;
+    return `<text x="5" y="${y + 4}" font-size="11" fill="var(--slate-body)" font-family="inherit">฿${val}</text>
+    <line x1="30" y1="${y}" x2="${lineChartW}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
   }).join('');
 
   const lineLabels = (st.sellerInsightsRange === '7d' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
