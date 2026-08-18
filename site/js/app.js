@@ -1272,7 +1272,7 @@ const AIST_TODO_CHIPS = ['เพิ่มรูปภาพ', 'ปรับป�
 const SELLER_SECTIONS = [
   { key: 'studio', label: 'AI สตูดิโอสินค้า', icon: 'sparkles' },
   { key: 'stock', label: 'จัดการสต๊อก', icon: 'package' },
-  { key: 'insights', label: 'Business Insights', icon: 'bar-chart-3' }
+  { key: 'insights', label: 'ข้อมูลเชิงลึกธุรกิจ', icon: 'bar-chart-3' }
 ];
 
 function renderSellerCentre(vm) {
@@ -1456,27 +1456,30 @@ function renderSellerInsights(vm) {
   const areaPoints = `${pad},${chartH - pad} ${points} ${chartW - pad},${chartH - pad}`;
 
   return `
-    <div class="aist-section-head">
-      <div class="aist-section-title">${aiSparkIcon()}Business Insights</div>
-      <div class="aist-section-sub">ภาพรวมยอดขายและพฤติกรรมลูกค้า วิเคราะห์โดย AI</div>
+    <div class="aist-section-head" style="margin-bottom:20px">
+      <div class="aist-section-title">${aiSparkIcon()}ข้อมูลเชิงลึกธุรกิจ</div>
     </div>
 
-    <div class="aist-insight-box">
-      <div class="ai-avatar-bot">${aiSparkIcon()}</div>
-      <div>
-        <div class="aist-insight-title">AI สรุปให้คุณ</div>
-        <div class="aist-insight-text">ยอดขายรวมของคุณอยู่ที่ ${compact(totalOrders)} ออเดอร์ คิดเป็นมูลค่ากว่า ฿${compactBaht(totalRevenue)} โดย "${esc(top[0].name)}" คือสินค้าขายดีที่สุดในร้าน แนะนำให้เพิ่มโปรโมชันหรือโฆษณาในหมวด${esc(top[0].cat)}เพิ่มเติม เพื่อดันยอดขายให้ต่อเนื่อง</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px">
+      <div class="card" style="padding:16px">
+        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">รายได้รวม</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">฿${compactBaht(totalRevenue)}</div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">จำนวนออเดอร์</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">${compact(totalOrders)}</div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">มูลค่าเฉลี่ย</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">฿${aov}</div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">อัตราการแปลง</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">${conversion}%</div>
       </div>
     </div>
 
-    <div class="aist-kpis">
-      <div class="aist-kpi"><div class="aist-kpi-label">ยอดขายรวม</div><div class="aist-kpi-num">฿${compactBaht(totalRevenue)}</div></div>
-      <div class="aist-kpi"><div class="aist-kpi-label">จำนวนออเดอร์</div><div class="aist-kpi-num">${compact(totalOrders)}</div></div>
-      <div class="aist-kpi"><div class="aist-kpi-label">มูลค่าเฉลี่ยต่อออเดอร์</div><div class="aist-kpi-num">฿${aov}</div></div>
-      <div class="aist-kpi"><div class="aist-kpi-label">อัตราการเปลี่ยนเป็นคำสั่งซื้อ</div><div class="aist-kpi-num">${conversion}%</div></div>
-    </div>
-
-    <div class="card aist-chart-card">
+    <div class="card" style="padding:18px;margin-bottom:20px">
       <div class="aist-chart-head">
         <div class="aist-chart-title">แนวโน้มยอดขาย</div>
         <div class="chip-row">
@@ -1484,14 +1487,14 @@ function renderSellerInsights(vm) {
           <div class="chip small ${st.sellerInsightsRange === '30d' ? 'active' : ''}" data-action="sellerSetRange" data-range="30d">30 วัน</div>
         </div>
       </div>
-      <svg class="aist-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+      <svg class="aist-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none" style="margin-top:12px">
         <polygon points="${areaPoints}" fill="var(--brand-blue-soft)"></polygon>
         <polyline points="${points}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
       </svg>
     </div>
 
-    <div class="card aist-top-card">
-      <div class="aist-chart-title" style="margin-bottom:14px">สินค้าขายดีที่สุด</div>
+    <div class="card" style="padding:18px">
+      <div class="aist-chart-title" style="margin-bottom:16px">สินค้าขายดีที่สุด</div>
       ${top.map((p, i) => `
       <div class="aist-top-row">
         <div class="aist-top-rank">${i + 1}</div>
@@ -1499,6 +1502,14 @@ function renderSellerInsights(vm) {
         <div class="aist-top-bar-track"><div class="aist-top-bar-fill" style="width:${Math.round((p.sold / maxSold) * 100)}%"></div></div>
         <div class="aist-top-sold">${compact(p.sold)} ขาย</div>
       </div>`).join('')}
+    </div>
+
+    <div class="aist-insight-box" style="margin-top:20px">
+      <div class="ai-avatar-bot">${aiSparkIcon()}</div>
+      <div>
+        <div class="aist-insight-title">AI สรุปให้คุณ</div>
+        <div class="aist-insight-text">ยอดขายรวมของคุณอยู่ที่ ${compact(totalOrders)} ออเดอร์ คิดเป็นมูลค่ากว่า ฿${compactBaht(totalRevenue)} โดย "${esc(top[0].name)}" คือสินค้าขายดีที่สุดในร้าน แนะนำให้เพิ่มโปรโมชันเพื่อดันยอดขายให้ต่อเนื่อง</div>
+      </div>
     </div>
   `;
 }
