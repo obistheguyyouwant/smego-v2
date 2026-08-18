@@ -504,7 +504,7 @@ function renderHeader(vm) {
           </svg>
         </button>
         <input type="file" id="visualSearchInput" accept="image/*" style="display:none">
-        <div class="search-btn">ค้น</div>
+        <div class="search-btn">ค้นหา</div>
         ${vm.q && st.screen === 'home' ? `
         <div class="suggest-panel">
           <div class="suggest-label">คำค้นหาแนะนำ</div>
