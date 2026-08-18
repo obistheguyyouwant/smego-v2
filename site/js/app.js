@@ -2075,7 +2075,7 @@ function renderAiWidget(st) {
 function renderRelatedImages(vm) {
   const p = vm.p;
   const pool = PRODUCTS.filter(x => !p || x.id !== p.id);
-  const items = (p ? pool.filter(x => x.cat === p.cat).concat(pool) : pool).slice(0, 6);
+  const items = (p ? pool.filter(x => x.cat === p.cat).concat(pool) : pool).slice(1, 7);
 
   return `
   <div class="section" style="padding-bottom:32px">
