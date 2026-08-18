@@ -1455,60 +1455,173 @@ function renderSellerInsights(vm) {
   const points = data.map((v, i) => `${(pad + i * stepX).toFixed(1)},${(chartH - pad - (v / maxVal) * (chartH - pad * 2)).toFixed(1)}`).join(' ');
   const areaPoints = `${pad},${chartH - pad} ${points} ${chartW - pad},${chartH - pad}`;
 
+  const dailySales = st.sellerInsightsRange === '7d'
+    ? [45, 52, 38, 65, 78, 52, 88]
+    : [45, 52, 38, 65, 78, 52, 88, 42, 71, 65, 95, 82, 55, 68, 72, 85, 63, 48, 92, 78, 55, 88, 65, 72, 85, 95, 72, 68, 55, 92];
+
+  const dailyRevenue = st.sellerInsightsRange === '7d'
+    ? [2100, 2400, 1800, 3200, 3800, 2500, 4200]
+    : [2100, 2400, 1800, 3200, 3800, 2500, 4200, 1900, 3300, 3100, 4500, 3900, 2600, 3200, 3400, 4100, 3000, 2300, 4400, 3700, 2600, 4200, 3100, 3400, 4100, 4600, 3400, 3200, 2600, 4400];
+
+  const lastOrders = [
+    { name: 'Savannah Nguyen', date: '07/05/2025', price: 25, category: 'Clothes', product: 'Lc Waikiki Jean cargo fille avec taille...', city: 'Rabat', status: 'completed' },
+    { name: 'Jerome Bell', date: '07/05/2025', price: 25, category: 'Shoes', product: 'Lc Waikiki Jean cargo fille avec taille...', city: 'Rabat', status: 'pending' },
+    { name: 'Darlene Robertson', date: '07/05/2025', price: 25, category: 'Clothes', product: 'Lc Waikiki Jean cargo fille avec taille...', city: 'Rabat', status: 'in_progress' },
+    { name: 'Cody Fisher', date: '07/05/2025', price: 25, category: 'Clothes', product: 'Lc Waikiki Jean cargo fille avec taille...', city: 'Rabat', status: 'cancelled' },
+  ];
+
+  const statusTabs = ['all', 'completed', 'in_progress', 'pending', 'cancelled'];
+  const statusLabels = { all: 'All tasks', completed: 'Completed', in_progress: 'In Progress', pending: 'Pending Approval', cancelled: 'Cancelled' };
+  const statusThaiLabels = { all: 'ทั้งหมด', completed: 'เสร็จสิ้น', in_progress: 'อยู่ระหว่างดำเนินการ', pending: 'รอการอนุมัติ', cancelled: 'ยกเลิก' };
+  const statusColors = { completed: '#10b981', pending: '#f59e0b', in_progress: '#06b6d4', cancelled: '#ef4444' };
+
+  const currentTab = st.sellerSalesTab || 'all';
+  const filteredOrders = currentTab === 'all' ? lastOrders : lastOrders.filter(o => o.status === currentTab);
+
+  const barChartW = 320, barChartH = 180;
+  const maxSalesDay = Math.max(...dailySales);
+  const barPoints = dailySales.map((v, i) => {
+    const barW = barChartW / (dailySales.length * 1.5);
+    const x = (i * barChartW) / dailySales.length + barW / 4;
+    const h = (v / maxSalesDay) * barChartH;
+    const y = barChartH - h;
+    return { x, y, w: barW, h };
+  });
+  const barSvg = barPoints.map((p, i) => `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${i % 2 === 0 ? 'var(--brand-blue)' : 'var(--slate-light)'}" rx="2"/>`).join('');
+
+  const lineChartW = 320, lineChartH = 180;
+  const maxRevenue = Math.max(...dailyRevenue);
+  const linePoints = dailyRevenue.map((v, i) => ({
+    x: (i / (dailyRevenue.length - 1)) * lineChartW,
+    y: lineChartH - (v / maxRevenue) * lineChartH
+  }));
+  const linePath = linePoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+
   return `
-    <div class="aist-section-head" style="margin-bottom:20px">
+    <div class="aist-section-head" style="margin-bottom:28px">
       <div class="aist-section-title">${aiSparkIcon()}ข้อมูลเชิงลึกธุรกิจ</div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px">
-      <div class="card" style="padding:16px">
-        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">รายได้รวม</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">฿${compactBaht(totalRevenue)}</div>
+    <!-- KPI Cards Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px">
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div style="font-size:12px;color:var(--slate-body);font-weight:500">รายได้รวม</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light)" data-lucide="info"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:var(--slate-dark);margin-bottom:8px">฿${compactBaht(totalRevenue)}</div>
+        <div style="font-size:12px;color:#10b981;font-weight:500">+41% จากเดือนที่แล้ว</div>
       </div>
-      <div class="card" style="padding:16px">
-        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">จำนวนออเดอร์</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">${compact(totalOrders)}</div>
+
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div style="font-size:12px;color:var(--slate-body);font-weight:500">ยอดขายรวม</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light)" data-lucide="info"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:var(--slate-dark);margin-bottom:8px">${compact(totalOrders)}</div>
+        <div style="font-size:12px;color:#10b981;font-weight:500">+41% จากเดือนที่แล้ว</div>
       </div>
-      <div class="card" style="padding:16px">
-        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">มูลค่าเฉลี่ย</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">฿${aov}</div>
+
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div style="font-size:12px;color:var(--slate-body);font-weight:500">จำนวนออเดอร์</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light)" data-lucide="info"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:var(--slate-dark);margin-bottom:8px">7,532</div>
+        <div style="font-size:12px;color:#ef4444;font-weight:500">-50% จากเดือนที่แล้ว</div>
       </div>
-      <div class="card" style="padding:16px">
-        <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px">อัตราการแปลง</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--slate-dark)">${conversion}%</div>
+
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div style="font-size:12px;color:var(--slate-body);font-weight:500">กำไร</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light)" data-lucide="info"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:var(--slate-dark);margin-bottom:8px">฿60,652</div>
+        <div style="font-size:12px;color:#10b981;font-weight:500">+41% จากเดือนที่แล้ว</div>
       </div>
     </div>
 
-    <div class="card" style="padding:18px;margin-bottom:20px">
-      <div class="aist-chart-head">
-        <div class="aist-chart-title">แนวโน้มยอดขาย</div>
-        <div class="chip-row">
-          <div class="chip small ${st.sellerInsightsRange === '7d' ? 'active' : ''}" data-action="sellerSetRange" data-range="7d">7 วัน</div>
-          <div class="chip small ${st.sellerInsightsRange === '30d' ? 'active' : ''}" data-action="sellerSetRange" data-range="30d">30 วัน</div>
+    <!-- Two Column Charts -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px">
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--slate-dark)">ยอดขายรวม</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light);cursor:pointer" data-lucide="calendar"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">1,525</div>
+        <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
+        <svg viewBox="0 0 ${barChartW} ${barChartH}" style="width:100%;height:120px;margin-top:8px">
+          ${barSvg}
+        </svg>
+      </div>
+
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--slate-dark)">รายได้รวม</div>
+          <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light);cursor:pointer" data-lucide="calendar"></svg>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">฿20,462.89</div>
+        <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
+        <svg viewBox="0 0 ${lineChartW} ${lineChartH}" style="width:100%;height:120px;margin-top:8px">
+          <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="${linePoints[linePoints.length - 1].x}" cy="${linePoints[linePoints.length - 1].y}" r="3" fill="var(--brand-blue)"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Last Sales Section -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--slate-light)">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--slate-dark)">ยอดขายล่าสุด</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:12px;color:var(--slate-body);cursor:pointer" data-action="sellerViewAllSales">ดูทั้งหมด</span>
+          <svg class="pill-icon" style="width:14px;height:14px;color:var(--slate-light);cursor:pointer" data-lucide="calendar"></svg>
         </div>
       </div>
-      <svg class="aist-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none" style="margin-top:12px">
-        <polygon points="${areaPoints}" fill="var(--brand-blue-soft)"></polygon>
-        <polyline points="${points}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
-      </svg>
-    </div>
 
-    <div class="card" style="padding:18px">
-      <div class="aist-chart-title" style="margin-bottom:16px">สินค้าขายดีที่สุด</div>
-      ${top.map((p, i) => `
-      <div class="aist-top-row">
-        <div class="aist-top-rank">${i + 1}</div>
-        <div class="aist-top-name">${esc(p.name)}</div>
-        <div class="aist-top-bar-track"><div class="aist-top-bar-fill" style="width:${Math.round((p.sold / maxSold) * 100)}%"></div></div>
-        <div class="aist-top-sold">${compact(p.sold)} ขาย</div>
-      </div>`).join('')}
-    </div>
+      <!-- Status Tabs -->
+      <div style="display:flex;border-bottom:1px solid var(--slate-light);padding:0;overflow-x:auto">
+        ${statusTabs.map(tab => `
+        <button class="aist-status-tab ${currentTab === tab ? 'active' : ''}" data-action="sellerSetSalesTab" data-tab="${tab}" style="padding:12px 16px;font-size:13px;color:${currentTab === tab ? 'var(--brand-blue)' : 'var(--slate-body)'};border-bottom:${currentTab === tab ? '2px solid var(--brand-blue)' : 'none'};background:none;border:none;cursor:pointer;white-space:nowrap;font-weight:${currentTab === tab ? '600' : '500'}">
+          ${statusLabels[tab]}${tab === 'pending' ? '<span style="margin-left:4px;background:var(--brand-blue);color:white;font-size:10px;padding:2px 6px;border-radius:10px;font-weight:700">2</span>' : ''}
+        </button>`).join('')}
+      </div>
 
-    <div class="aist-insight-box" style="margin-top:20px">
-      <div class="ai-avatar-bot">${aiSparkIcon()}</div>
-      <div>
-        <div class="aist-insight-title">AI สรุปให้คุณ</div>
-        <div class="aist-insight-text">ยอดขายรวมของคุณอยู่ที่ ${compact(totalOrders)} ออเดอร์ คิดเป็นมูลค่ากว่า ฿${compactBaht(totalRevenue)} โดย "${esc(top[0].name)}" คือสินค้าขายดีที่สุดในร้าน แนะนำให้เพิ่มโปรโมชันเพื่อดันยอดขายให้ต่อเนื่อง</div>
+      <!-- Sales Table -->
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--slate-light);background:var(--slate-lightest)">
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">ชื่อลูกค้า</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">วันที่</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">ราคา</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">หมวดหมู่</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">สินค้า</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">เมือง</th>
+              <th style="padding:12px 16px;text-align:left;color:var(--slate-body);font-weight:500;font-size:11px">สถานะ</th>
+              <th style="padding:12px 16px;text-align:center;color:var(--slate-body);font-weight:500;font-size:11px;width:40px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredOrders.map(order => `
+            <tr style="border-bottom:1px solid var(--slate-light);hover:background-color:var(--slate-lightest)">
+              <td style="padding:12px 16px;color:var(--slate-dark);font-weight:500">${esc(order.name)}</td>
+              <td style="padding:12px 16px;color:var(--slate-body)">${order.date}</td>
+              <td style="padding:12px 16px;color:var(--slate-dark);font-weight:500">฿${order.price.toFixed(2)}</td>
+              <td style="padding:12px 16px;color:var(--slate-body)">${order.category}</td>
+              <td style="padding:12px 16px;color:var(--slate-body);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(order.product)}</td>
+              <td style="padding:12px 16px;color:var(--slate-body)">${order.city}</td>
+              <td style="padding:12px 16px">
+                <span style="display:inline-block;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;color:white;background-color:${statusColors[order.status] || 'var(--slate-light)'}">
+                  ${order.status === 'completed' ? '✓ เสร็จสิ้น' : (order.status === 'pending' ? '⏱ รอการอนุมัติ' : (order.status === 'in_progress' ? '⟳ อยู่ระหว่างดำเนินการ' : '✕ ยกเลิก'))}
+                </span>
+              </td>
+              <td style="padding:12px 16px;text-align:center;cursor:pointer">
+                <svg class="pill-icon" style="width:16px;height:16px;color:var(--slate-light)" data-lucide="more-vertical"></svg>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
       </div>
     </div>
   `;
@@ -1829,6 +1942,8 @@ const ACTIONS = {
   sellerStockInc: (el) => sellerAdjustStock(el.dataset.id, 1),
   sellerStockDec: (el) => sellerAdjustStock(el.dataset.id, -1),
   sellerSetRange: (el) => setState({ sellerInsightsRange: el.dataset.range }),
+  sellerSetSalesTab: (el) => setState({ sellerSalesTab: el.dataset.tab }),
+  sellerViewAllSales: () => setState({ sellerCurrentPage: 'sales' }),
 
   openAicwNew: () => setState({
     aicwOpen: true, aicwMode: 'new', aicwPid: null, aicwKeywords: '', aicwDraft: null, aicwGenerating: false,
