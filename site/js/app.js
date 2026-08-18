@@ -1478,24 +1478,66 @@ function renderSellerInsights(vm) {
   const currentTab = st.sellerSalesTab || 'all';
   const filteredOrders = currentTab === 'all' ? lastOrders : lastOrders.filter(o => o.status === currentTab);
 
-  const barChartW = 320, barChartH = 180;
+  // Professional Bar Chart
+  const barChartW = 380, barChartH = 220, barPadX = 40, barPadY = 30;
+  const chartAreaW = barChartW - barPadX * 2, chartAreaH = barChartH - barPadY * 2;
   const maxSalesDay = Math.max(...dailySales);
-  const barPoints = dailySales.map((v, i) => {
-    const barW = barChartW / (dailySales.length * 1.5);
-    const x = (i * barChartW) / dailySales.length + barW / 4;
-    const h = (v / maxSalesDay) * barChartH;
-    const y = barChartH - h;
-    return { x, y, w: barW, h };
-  });
-  const barSvg = barPoints.map((p, i) => `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${i % 2 === 0 ? 'var(--brand-blue)' : 'var(--slate-light)'}" rx="2"/>`).join('');
+  const barSpacing = chartAreaW / (dailySales.length + 1);
+  const barWidth = barSpacing * 0.65;
 
-  const lineChartW = 320, lineChartH = 180;
+  const barGridLines = Array.from({length: 5}, (_, i) => {
+    const y = barPadY + (chartAreaH / 4) * i;
+    const val = Math.round((maxSalesDay / 4) * (4 - i));
+    return `<line x1="${barPadX}" y1="${y}" x2="${barChartW - barPadX}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+  }).join('');
+
+  const barRects = dailySales.map((v, i) => {
+    const x = barPadX + barSpacing * (i + 1) - barWidth / 2;
+    const h = (v / maxSalesDay) * chartAreaH;
+    const y = barPadY + chartAreaH - h;
+    const isBlue = i % 2 === 0;
+    return `<rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${isBlue ? 'var(--brand-blue)' : '#E0E9FF'}" rx="3" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.05))"/>`;
+  }).join('');
+
+  const barSvg = `${barGridLines}${barRects}
+    <line x1="${barPadX}" y1="${barPadY + chartAreaH}" x2="${barChartW - barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--slate-body)" stroke-width="1.5"/>
+    <line x1="${barPadX}" y1="${barPadY}" x2="${barPadX}" y2="${barPadY + chartAreaH}" stroke="var(--slate-body)" stroke-width="1.5"/>`;
+
+  // Professional Line Chart with Gradient
+  const lineChartW = 380, lineChartH = 220, linePadX = 40, linePadY = 30;
+  const chartAreaLW = lineChartW - linePadX * 2, chartAreaLH = lineChartH - linePadY * 2;
   const maxRevenue = Math.max(...dailyRevenue);
+  const minRevenue = Math.min(...dailyRevenue);
+  const revRange = maxRevenue - minRevenue || maxRevenue;
+
+  const lineGridLines = Array.from({length: 5}, (_, i) => {
+    const y = linePadY + (chartAreaLH / 4) * i;
+    return `<line x1="${linePadX}" y1="${y}" x2="${lineChartW - linePadX}" y2="${y}" stroke="var(--slate-lightest)" stroke-width="1"/>`;
+  }).join('');
+
   const linePoints = dailyRevenue.map((v, i) => ({
-    x: (i / (dailyRevenue.length - 1)) * lineChartW,
-    y: lineChartH - (v / maxRevenue) * lineChartH
+    x: linePadX + (i / (dailyRevenue.length - 1)) * chartAreaLW,
+    y: linePadY + chartAreaLH - ((v - minRevenue) / revRange) * chartAreaLH
   }));
+
   const linePath = linePoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  const areaPath = `${linePath} L ${linePoints[linePoints.length - 1].x},${linePadY + chartAreaLH} L ${linePadX},${linePadY + chartAreaLH} Z`;
+
+  const lineCircles = linePoints.map((p, i) => {
+    if (i === 0 || i === linePoints.length - 1) return `<circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--brand-blue)" stroke="white" stroke-width="2"/>`;
+    return '';
+  }).join('');
+
+  const lineSvg = `${lineGridLines}
+    <defs><linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:var(--brand-blue);stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:var(--brand-blue);stop-opacity:0.01" />
+    </linearGradient></defs>
+    <path d="${areaPath}" fill="url(#lineGradient)"/>
+    <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 3px rgba(46,107,255,0.15))"/>
+    ${lineCircles}
+    <line x1="${linePadX}" y1="${linePadY + chartAreaLH}" x2="${lineChartW - linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--slate-body)" stroke-width="1.5"/>
+    <line x1="${linePadX}" y1="${linePadY}" x2="${linePadX}" y2="${linePadY + chartAreaLH}" stroke="var(--slate-body)" stroke-width="1.5"/>`;
 
   return `
     <div class="aist-section-head" style="margin-bottom:28px">
@@ -1550,7 +1592,7 @@ function renderSellerInsights(vm) {
         </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">1,525</div>
         <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
-        <svg viewBox="0 0 ${barChartW} ${barChartH}" style="width:100%;height:120px;margin-top:8px">
+        <svg viewBox="0 0 ${barChartW} ${barChartH}" style="width:100%;height:200px;margin-top:12px;margin-left:-10px;margin-right:-10px">
           ${barSvg}
         </svg>
       </div>
@@ -1562,9 +1604,8 @@ function renderSellerInsights(vm) {
         </div>
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--slate-dark);margin-bottom:4px">฿20,462.89</div>
         <div style="font-size:12px;color:#10b981;margin-bottom:16px;font-weight:500">+20.1% จากเดือนที่แล้ว</div>
-        <svg viewBox="0 0 ${lineChartW} ${lineChartH}" style="width:100%;height:120px;margin-top:8px">
-          <path d="${linePath}" fill="none" stroke="var(--brand-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="${linePoints[linePoints.length - 1].x}" cy="${linePoints[linePoints.length - 1].y}" r="3" fill="var(--brand-blue)"/>
+        <svg viewBox="0 0 ${lineChartW} ${lineChartH}" style="width:100%;height:200px;margin-top:12px;margin-left:-10px;margin-right:-10px">
+          ${lineSvg}
         </svg>
       </div>
     </div>
