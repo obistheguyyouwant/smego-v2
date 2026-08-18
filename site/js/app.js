@@ -1414,22 +1414,22 @@ function renderSellerStock(vm) {
       <div style="display:grid;grid-template-columns:180px 1fr 1fr 1fr;gap:20px;margin-bottom:24px">
         <!-- Product Image -->
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px;font-weight:600">Product Image</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:8px;font-weight:600">รูปสินค้า</div>
           <div style="width:100%;aspect-ratio:1;border:2px dashed var(--border-subtle);border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--slate-lightest);cursor:pointer" data-action="sellerBrowseProductImage">
             <svg class="pill-icon" style="width:40px;height:40px;color:var(--slate-body)" data-lucide="image-plus"></svg>
           </div>
-          <button class="btn" style="width:100%;margin-top:8px;background:var(--brand-blue);color:white;font-weight:600;padding:10px" data-action="sellerBrowseProductImage">+ Upload</button>
-          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">Max 5MB<br/>Ratio 1:1</div>
+          <button class="btn" style="width:100%;margin-top:8px;background:var(--brand-blue);color:white;font-weight:600;padding:10px" data-action="sellerBrowseProductImage">+ อัปโหลด</button>
+          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">ขนาดสูงสุด 5MB<br/>สัดส่วน 1:1</div>
         </div>
 
         <!-- Product Name & SKU -->
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Name *</div>
-          <input type="text" placeholder="Product Name" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">ชื่อสินค้า *</div>
+          <input type="text" placeholder="ชื่อสินค้า" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
 
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Unit</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">หน่วย</div>
           <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
-            <option>Please Select</option>
+            <option>เลือก</option>
             <option>ชิ้น</option>
             <option>แกลลอน</option>
             <option>กล่อง</option>
@@ -1439,26 +1439,26 @@ function renderSellerStock(vm) {
         <!-- SKU & Brand -->
         <div>
           <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">SKU</div>
-          <input type="text" placeholder="Product Name" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
+          <input type="text" placeholder="SKU" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;margin-bottom:16px" />
 
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Brand</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">แบรนด์</div>
           <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
-            <option>Please Select</option>
+            <option>เลือก</option>
           </select>
         </div>
 
         <!-- Barcode & Category -->
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Barcode Type *</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">ประเภทบาร์โค้ด *</div>
           <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white;margin-bottom:16px">
             <option>Code 128 (C128)</option>
             <option>Code 39</option>
             <option>EAN-13</option>
           </select>
 
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Category</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">หมวดหมู่</div>
           <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
-            <option>Please Select</option>
+            <option>เลือก</option>
           </select>
         </div>
       </div>
@@ -1466,14 +1466,14 @@ function renderSellerStock(vm) {
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px">
         <!-- Sub Category & Business Location & Alert Quantity -->
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Sub Category</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">หมวดหมู่ย่อย</div>
           <select style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;background:white">
-            <option>Please Select</option>
+            <option>เลือก</option>
           </select>
         </div>
 
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Business Locations</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">สถานที่ประกอบการ</div>
           <div style="padding:8px 12px;background:var(--slate-dark);color:white;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:6px;width:fit-content">
             <span style="width:14px;height:14px;background:white;border-radius:2px"></span>
             Sadax (BL001)
@@ -1481,25 +1481,25 @@ function renderSellerStock(vm) {
         </div>
 
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Alert Quantity</div>
-          <input type="number" placeholder="Alert Quantity" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">จำนวนเตือน</div>
+          <input type="number" placeholder="จำนวนเตือน" style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px" />
         </div>
       </div>
 
       <!-- Product Description & Brochure -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Description</div>
-          <textarea placeholder="Write description ..." style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;min-height:120px;font-family:inherit;resize:none"></textarea>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">คำอธิบายสินค้า</div>
+          <textarea placeholder="เขียนคำอธิบาย ..." style="width:100%;padding:12px;border:1px solid var(--border-subtle);border-radius:8px;font-size:13px;min-height:120px;font-family:inherit;resize:none"></textarea>
         </div>
 
         <div>
-          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">Product Brochure</div>
+          <div style="font-size:12px;color:var(--slate-body);margin-bottom:6px;font-weight:600">โบรชัวร์สินค้า</div>
           <div style="width:100%;padding:20px;border:2px dashed var(--border-subtle);border-radius:8px;text-align:center;cursor:pointer;background:var(--slate-lightest)">
-            <div style="font-size:13px;color:var(--slate-body);margin-bottom:8px">Choose File</div>
-            <div style="font-size:11px;color:var(--slate-body)">No file chosen</div>
+            <div style="font-size:13px;color:var(--slate-body);margin-bottom:8px">เลือกไฟล์</div>
+            <div style="font-size:11px;color:var(--slate-body)">ยังไม่เลือกไฟล์</div>
           </div>
-          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">Max 5MB<br/>Allowed: .pdf, .csv, .zip, .doc, .docx, .jpeg</div>
+          <div style="font-size:11px;color:var(--slate-body);margin-top:8px">ขนาดสูงสุด 5MB<br/>ที่อนุญาต: .pdf, .csv, .zip, .doc, .docx, .jpeg</div>
         </div>
       </div>
 
