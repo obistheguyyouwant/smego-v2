@@ -318,7 +318,7 @@ function renderNewsletter() {
             <p class="newsletter-description">สมัครรับข้อมูลข่าวสารสินค้าใหม่ ลดราคา และข้อเสนอพิเศษโดยตรง</p>
             <form class="newsletter-form">
               <input type="email" class="newsletter-input" placeholder="อีเมลของคุณ" required>
-              <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
+              <button type="submit" class="btn btn-accent">สมัครสมาชิก</button>
             </form>
           </div>
         </div>
